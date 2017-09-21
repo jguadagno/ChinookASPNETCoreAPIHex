@@ -1,15 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26823.1
+VisualStudioVersion = 15.0.26730.16
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chinook.API", "Chinook.API\Chinook.API.csproj", "{459C8BDC-14DF-4018-9D83-7F9C7BCD11A7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chinook.API", "Chinook.API\Chinook.API.csproj", "{459C8BDC-14DF-4018-9D83-7F9C7BCD11A7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chinook.Data", "Chinook.Data\Chinook.Data.csproj", "{B41C3E92-1759-4A61-B74A-B22215DAE2E9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chinook.Data", "Chinook.Data\Chinook.Data.csproj", "{B41C3E92-1759-4A61-B74A-B22215DAE2E9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chinook.Domain", "Chinook.Domain\Chinook.Domain.csproj", "{C39A66F8-DA58-4BF1-BE35-3875CE5CA279}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chinook.App", "Chinook.App\Chinook.App.csproj", "{7BF86C8F-3913-447D-9598-EFFF5EC58B80}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chinook.Domain", "Chinook.Domain\Chinook.Domain.csproj", "{C39A66F8-DA58-4BF1-BE35-3875CE5CA279}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +27,6 @@ Global
 		{C39A66F8-DA58-4BF1-BE35-3875CE5CA279}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C39A66F8-DA58-4BF1-BE35-3875CE5CA279}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C39A66F8-DA58-4BF1-BE35-3875CE5CA279}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7BF86C8F-3913-447D-9598-EFFF5EC58B80}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7BF86C8F-3913-447D-9598-EFFF5EC58B80}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7BF86C8F-3913-447D-9598-EFFF5EC58B80}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7BF86C8F-3913-447D-9598-EFFF5EC58B80}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
