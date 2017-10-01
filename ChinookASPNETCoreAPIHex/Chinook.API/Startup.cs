@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Chinook.API.Mapping;
 using Chinook.API.Configurations;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace Chinook.API
 {
@@ -33,7 +34,12 @@ namespace Chinook.API
                 .AddCorsConfiguration()
                 .AddConnectionProvider(Configuration)
                 .AddAppSettings(Configuration);
-            }
+
+            services.AddSwaggerGen(s =>
+            {
+                s.SwaggerDoc("v1", new Info {Title = "Chinook API", Description = "Chinook Music Demo API"});
+            });
+        }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
@@ -54,7 +60,12 @@ namespace Chinook.API
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
+            });
 
+            app.UseSwagger();
+            app.UseSwaggerUI(s =>
+            {
+                s.SwaggerEndpoint("/swagger/v1/swagger.json", "v1 docs");
             });
         }
     }

@@ -1,8 +1,8 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
+using Chinook.API.ViewModels;
 using Chinook.Domain.Entities;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using Chinook.API.ViewModels;
 
 namespace Chinook.API.Mapping
 {
@@ -13,8 +13,9 @@ namespace Chinook.API.Mapping
         public static IServiceCollection AddAutoMapper(this IServiceCollection services)
         {
             if (services == null)
+            {
                 throw new ArgumentNullException("services");
-
+            }
 
             services.AddSingleton(GetConfiguration().CreateMapper());
 
