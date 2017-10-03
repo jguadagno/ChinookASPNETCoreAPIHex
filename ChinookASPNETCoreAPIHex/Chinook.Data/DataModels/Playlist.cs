@@ -7,6 +7,6 @@ namespace Chinook.Data.DataModels
         public int PlaylistId { get; set; }
         public string Name { get; set; }
 
-        public virtual ICollection<PlaylistTrack> PlaylistTrack { get; set; } = new HashSet<PlaylistTrack>();
+        public virtual ICollection<PlaylistTrack> PlaylistTracks { get; set; } = new HashSet<PlaylistTrack>();
     }
 }

@@ -40,7 +40,7 @@ namespace Chinook.Data.Configurations
             entity.Property(e => e.State).HasMaxLength(40);
 
             entity.HasOne(d => d.SupportRep)
-                .WithMany(p => p.Customer)
+                .WithMany(p => p.Customers)
                 .HasForeignKey(d => d.SupportRepId)
                 .HasConstraintName("FK__Customer__Suppor__2C3393D0");
         }

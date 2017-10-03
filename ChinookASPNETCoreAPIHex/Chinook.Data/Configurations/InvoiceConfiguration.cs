@@ -26,7 +26,7 @@ namespace Chinook.Data.Configurations
             entity.Property(e => e.Total).HasColumnType("numeric");
 
             entity.HasOne(d => d.Customer)
-                .WithMany(p => p.Invoice)
+                .WithMany(p => p.Invoices)
                 .HasForeignKey(d => d.CustomerId)
                 .OnDelete(DeleteBehavior.Restrict)
                 .HasConstraintName("FK__Invoice__Custome__2D27B809");

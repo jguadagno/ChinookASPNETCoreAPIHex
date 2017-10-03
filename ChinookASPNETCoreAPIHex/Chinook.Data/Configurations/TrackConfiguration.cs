@@ -26,17 +26,17 @@ namespace Chinook.Data.Configurations
             entity.Property(e => e.UnitPrice).HasColumnType("numeric");
 
             entity.HasOne(d => d.Album)
-                .WithMany(p => p.Track)
+                .WithMany(p => p.Tracks)
                 .HasForeignKey(d => d.AlbumId)
                 .HasConstraintName("FK__Track__AlbumId__286302EC");
 
             entity.HasOne(d => d.Genre)
-                .WithMany(p => p.Track)
+                .WithMany(p => p.Tracks)
                 .HasForeignKey(d => d.GenreId)
                 .HasConstraintName("FK__Track__GenreId__2A4B4B5E");
 
             entity.HasOne(d => d.MediaType)
-                .WithMany(p => p.Track)
+                .WithMany(p => p.Tracks)
                 .HasForeignKey(d => d.MediaTypeId)
                 .OnDelete(DeleteBehavior.Restrict)
                 .HasConstraintName("FK__Track__MediaType__29572725");

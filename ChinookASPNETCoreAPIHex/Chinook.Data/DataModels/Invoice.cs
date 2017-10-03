@@ -15,7 +15,7 @@ namespace Chinook.Data.DataModels
         public string BillingPostalCode { get; set; }
         public decimal Total { get; set; }
 
-        public virtual ICollection<InvoiceLine> InvoiceLine { get; set; } = new HashSet<InvoiceLine>();
+        public virtual ICollection<InvoiceLine> InvoiceLines { get; set; } = new HashSet<InvoiceLine>();
         public virtual Customer Customer { get; set; }
     }
 }

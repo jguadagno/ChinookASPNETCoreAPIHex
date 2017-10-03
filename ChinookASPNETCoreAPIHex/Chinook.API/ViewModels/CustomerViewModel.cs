@@ -1,4 +1,7 @@
-﻿namespace Chinook.API.ViewModels
+﻿using Chinook.Data.DataModels;
+using System.Collections.Generic;
+
+namespace Chinook.API.ViewModels
 {
     public class CustomerViewModel
     {
@@ -16,5 +19,8 @@
         public string Email { get; set; }
         public int? SupportRepId { get; set; }
         public string SupportRepName { get; set; }
+
+        public IList<Invoice> Invoices { get; set; }
+        public Employee SupportRep { get; set; }
     }
 }

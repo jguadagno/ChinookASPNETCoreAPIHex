@@ -21,8 +21,8 @@ namespace Chinook.Data.DataModels
         public string Fax { get; set; }
         public string Email { get; set; }
 
-        public ICollection<Customer> Customer { get; set; } = new HashSet<Customer>();
+        public ICollection<Customer> Customers { get; set; } = new HashSet<Customer>();
         public Employee ReportsToNavigation { get; set; }
-        public ICollection<Employee> InverseReportsToNavigation { get; set; }
+        public ICollection<Employee> InverseReportsToNavigations { get; set; }
     }
 }

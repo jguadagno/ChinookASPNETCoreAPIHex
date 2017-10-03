@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using Chinook.Data.DataModels;
 
 namespace Chinook.API.ViewModels
 {
@@ -20,5 +22,9 @@ namespace Chinook.API.ViewModels
         public string Phone { get; set; }
         public string Fax { get; set; }
         public string Email { get; set; }
+
+        public List<Customer> Customers { get; set; }
+        public Employee ReportsToNavigation { get; set; }
+        public ICollection<Employee> InverseReportsToNavigations { get; set; }
     }
 }

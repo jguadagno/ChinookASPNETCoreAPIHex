@@ -17,13 +17,13 @@ namespace Chinook.Data.Configurations
             entity.Property(e => e.UnitPrice).HasColumnType("numeric");
 
             entity.HasOne(d => d.Invoice)
-                .WithMany(p => p.InvoiceLine)
+                .WithMany(p => p.InvoiceLines)
                 .HasForeignKey(d => d.InvoiceId)
                 .OnDelete(DeleteBehavior.Restrict)
                 .HasConstraintName("FK__InvoiceLi__Invoi__2F10007B");
 
             entity.HasOne(d => d.Track)
-                .WithMany(p => p.InvoiceLine)
+                .WithMany(p => p.InvoiceLines)
                 .HasForeignKey(d => d.TrackId)
                 .OnDelete(DeleteBehavior.Restrict)
                 .HasConstraintName("FK__InvoiceLi__Track__2E1BDC42");

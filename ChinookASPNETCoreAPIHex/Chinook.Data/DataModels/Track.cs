@@ -14,8 +14,8 @@ namespace Chinook.Data.DataModels
         public int Bytes { get; set; }
         public decimal UnitPrice { get; set; }
 
-        public virtual ICollection<InvoiceLine> InvoiceLine { get; set; } = new HashSet<InvoiceLine>();
-        public virtual ICollection<PlaylistTrack> PlaylistTrack { get; set; } = new HashSet<PlaylistTrack>();
+        public virtual ICollection<InvoiceLine> InvoiceLines { get; set; } = new HashSet<InvoiceLine>();
+        public virtual ICollection<PlaylistTrack> PlaylistTracks { get; set; } = new HashSet<PlaylistTrack>();
         public virtual Album Album { get; set; }
         public virtual Genre Genre { get; set; }
         public virtual MediaType MediaType { get; set; }

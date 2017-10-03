@@ -7,6 +7,6 @@ namespace Chinook.Data.DataModels
         public int ArtistId { get; set; }
         public string Name { get; set; }
 
-        public virtual ICollection<Album> Album { get; set; } = new HashSet<Album>();
+        public virtual ICollection<Album> Albums { get; set; } = new HashSet<Album>();
     }
 }

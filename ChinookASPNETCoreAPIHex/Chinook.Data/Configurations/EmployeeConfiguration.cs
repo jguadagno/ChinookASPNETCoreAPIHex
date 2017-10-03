@@ -42,7 +42,7 @@ namespace Chinook.Data.Configurations
             entity.Property(e => e.Title).HasMaxLength(30);
 
             entity.HasOne(d => d.ReportsToNavigation)
-                .WithMany(p => p.InverseReportsToNavigation)
+                .WithMany(p => p.InverseReportsToNavigations)
                 .HasForeignKey(d => d.ReportsTo)
                 .HasConstraintName("FK__Employee__Report__2B3F6F97");
         }

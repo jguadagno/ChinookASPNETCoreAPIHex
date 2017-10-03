@@ -18,7 +18,7 @@ namespace Chinook.Data.DataModels
         public string Email { get; set; }
         public int? SupportRepId { get; set; }
 
-        public virtual ICollection<Invoice> Invoice { get; set; } = new HashSet<Invoice>();
+        public virtual ICollection<Invoice> Invoices { get; set; } = new HashSet<Invoice>();
         public virtual Employee SupportRep { get; set; }
     }
 }

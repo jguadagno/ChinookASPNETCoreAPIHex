@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using Chinook.Data.DataModels;
 
 namespace Chinook.API.ViewModels
 {
@@ -14,5 +16,8 @@ namespace Chinook.API.ViewModels
         public string BillingCountry { get; set; }
         public string BillingPostalCode { get; set; }
         public decimal Total { get; set; }
+
+        public IList<InvoiceLine> InvoiceLines { get; set; }
+        public virtual Customer Customer { get; set; }
     }
 }

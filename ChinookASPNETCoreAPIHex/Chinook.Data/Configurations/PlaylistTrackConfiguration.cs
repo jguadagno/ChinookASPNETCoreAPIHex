@@ -18,13 +18,13 @@ namespace Chinook.Data.Configurations
                 .HasName("IFK_Track_PlaylistTrack");
 
             entity.HasOne(d => d.Playlist)
-                .WithMany(p => p.PlaylistTrack)
+                .WithMany(p => p.PlaylistTracks)
                 .HasForeignKey(d => d.PlaylistId)
                 .OnDelete(DeleteBehavior.Restrict)
                 .HasConstraintName("FK__PlaylistT__Playl__30F848ED");
 
             entity.HasOne(d => d.Track)
-                .WithMany(p => p.PlaylistTrack)
+                .WithMany(p => p.PlaylistTracks)
                 .HasForeignKey(d => d.TrackId)
                 .OnDelete(DeleteBehavior.Restrict)
                 .HasConstraintName("FK__PlaylistT__Track__300424B4");

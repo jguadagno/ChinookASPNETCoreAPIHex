@@ -3,6 +3,8 @@ using AutoMapper;
 using Chinook.API.ViewModels;
 using Chinook.Domain.Entities;
 using Microsoft.Extensions.DependencyInjection;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace Chinook.API.Mapping
 {
