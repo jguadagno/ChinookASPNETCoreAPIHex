@@ -16,12 +16,12 @@ namespace Chinook.API.Controllers
     public class MediaTypeController : Controller
     {
         public readonly IMediaTypeRepository MediaTypeRepository;
-        public IMapper Mapper1 { get; }
+        public IMapper Mapper { get; }
 
         public MediaTypeController(IMediaTypeRepository mediaTypeRepository, IMapper mapper)
         {
             MediaTypeRepository = mediaTypeRepository;
-            Mapper1 = mapper;
+            Mapper = mapper;
         }
 
         [HttpGet]

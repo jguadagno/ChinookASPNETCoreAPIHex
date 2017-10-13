@@ -19,7 +19,7 @@ namespace Chinook.API.Controllers
         public readonly IAlbumRepository AlbumRepository;
         public readonly IGenreRepository GenreRepository;
         public readonly IMediaTypeRepository MediaTypeRepository;
-        public IMapper Mapper1 { get; }
+        public IMapper Mapper { get; }
 
         public TrackController(ITrackRepository trackRepository, IMapper mapper,
             IAlbumRepository albumRepository, IGenreRepository genreRepository,
@@ -29,7 +29,7 @@ namespace Chinook.API.Controllers
             AlbumRepository = albumRepository;
             GenreRepository = genreRepository;
             MediaTypeRepository = mediaTypeRepository;
-            Mapper1 = mapper;
+            Mapper = mapper;
         }
 
         [HttpGet]

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Chinook.Data.DataModels;
+﻿using Chinook.Data.DataModels;
 
 namespace Chinook.API.ViewModels
 {

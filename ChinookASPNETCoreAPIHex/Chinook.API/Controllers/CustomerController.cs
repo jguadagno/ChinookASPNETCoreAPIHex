@@ -17,13 +17,13 @@ namespace Chinook.API.Controllers
     {
         public readonly ICustomerRepository CustomerRepository;
         public readonly IEmployeeRepository EmployeeRepository;
-        public IMapper Mapper1 { get; }
+        public IMapper Mapper { get; }
 
         public CustomerController(ICustomerRepository customerRepository, IMapper mapper, IEmployeeRepository employeeRepository)
         {
             CustomerRepository = customerRepository;
             EmployeeRepository = employeeRepository;
-            Mapper1 = mapper;
+            Mapper = mapper;
         }
 
         [HttpGet]

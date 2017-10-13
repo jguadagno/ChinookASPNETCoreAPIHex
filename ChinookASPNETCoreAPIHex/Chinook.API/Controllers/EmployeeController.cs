@@ -16,12 +16,12 @@ namespace Chinook.API.Controllers
     public class EmployeeController : Controller
     {
         public readonly IEmployeeRepository EmployeeRepository;
-        public IMapper Mapper1 { get; }
+        public IMapper Mapper { get; }
 
         public EmployeeController(IEmployeeRepository employeeRepository, IMapper mapper)
         {
             EmployeeRepository = employeeRepository;
-            Mapper1 = mapper;
+            Mapper = mapper;
         }
 
         [HttpGet]

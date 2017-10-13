@@ -16,12 +16,12 @@ namespace Chinook.API.Controllers
     public class PlaylistController : Controller
     {
         public readonly IPlaylistRepository PlaylistRepository;
-        public IMapper Mapper1 { get; }
+        public IMapper Mapper { get; }
 
         public PlaylistController(IPlaylistRepository playlistRepository, IMapper mapper)
         {
             PlaylistRepository = playlistRepository;
-            Mapper1 = mapper;
+            Mapper = mapper;
         }
 
         [HttpGet]

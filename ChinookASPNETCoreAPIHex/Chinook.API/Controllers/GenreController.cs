@@ -16,12 +16,12 @@ namespace Chinook.API.Controllers
     public class GenreController : Controller
     {
         public readonly IGenreRepository GenreRepository;
-        public IMapper Mapper1 { get; }
+        public IMapper Mapper { get; }
 
         public GenreController(IGenreRepository genreRepository, IMapper mapper)
         {
             GenreRepository = genreRepository;
-            Mapper1 = mapper;
+            Mapper = mapper;
         }
 
         [HttpGet]

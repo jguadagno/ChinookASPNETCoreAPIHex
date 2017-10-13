@@ -17,13 +17,13 @@ namespace Chinook.API.Controllers
     {
         public readonly IAlbumRepository AlbumRepository;
         public readonly IArtistRepository ArtistRepository;
-        public IMapper Mapper1 { get; }
+        public IMapper Mapper { get; }
 
         public AlbumController(IAlbumRepository albumRepository, IMapper mapper, IArtistRepository artistRepository)
         {
             AlbumRepository = albumRepository;
             ArtistRepository = artistRepository;
-            Mapper1 = mapper;
+            Mapper = mapper;
         }
 
         [HttpGet]

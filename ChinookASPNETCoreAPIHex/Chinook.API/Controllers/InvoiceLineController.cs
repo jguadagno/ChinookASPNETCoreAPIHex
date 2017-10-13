@@ -18,7 +18,7 @@ namespace Chinook.API.Controllers
         public readonly IInvoiceLineRepository InvoiceLineRepository;
         public readonly IInvoiceRepository InvoiceRepository;
         public readonly ITrackRepository TrackRepository;
-        public IMapper Mapper1 { get; }
+        public IMapper Mapper { get; }
 
         public InvoiceLineController(IInvoiceLineRepository invoiceLineRepository, IMapper mapper,
             IInvoiceRepository invoiceRepository, ITrackRepository trackRepository)
@@ -26,7 +26,7 @@ namespace Chinook.API.Controllers
             InvoiceLineRepository = invoiceLineRepository;
             InvoiceRepository = invoiceRepository;
             TrackRepository = trackRepository;
-            Mapper1 = mapper;
+            Mapper = mapper;
         }
 
         [HttpGet]
