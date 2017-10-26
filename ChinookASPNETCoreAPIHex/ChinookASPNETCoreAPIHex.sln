@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27004.2002
+VisualStudioVersion = 15.0.27004.2005
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chinook.API", "Chinook.API\Chinook.API.csproj", "{459C8BDC-14DF-4018-9D83-7F9C7BCD11A7}"
 EndProject
@@ -10,6 +10,10 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chinook.Domain", "Chinook.Domain\Chinook.Domain.csproj", "{C39A66F8-DA58-4BF1-BE35-3875CE5CA279}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chinook.IntegrationTest", "Chinook.IntegrationTest\Chinook.IntegrationTest.csproj", "{24136F22-0699-4A37-A2AE-3DF233A6CF11}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chinook.MockData", "Chinook.MockData\Chinook.MockData.csproj", "{B93E7610-7D6A-4DE1-B49F-6D0D40EE1B5E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chinook.UnitTest", "Chinook.UnitTest\Chinook.UnitTest.csproj", "{B93D4338-6789-43AE-AFAA-888A063132AF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +37,14 @@ Global
 		{24136F22-0699-4A37-A2AE-3DF233A6CF11}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{24136F22-0699-4A37-A2AE-3DF233A6CF11}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{24136F22-0699-4A37-A2AE-3DF233A6CF11}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B93E7610-7D6A-4DE1-B49F-6D0D40EE1B5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B93E7610-7D6A-4DE1-B49F-6D0D40EE1B5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B93E7610-7D6A-4DE1-B49F-6D0D40EE1B5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B93E7610-7D6A-4DE1-B49F-6D0D40EE1B5E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B93D4338-6789-43AE-AFAA-888A063132AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B93D4338-6789-43AE-AFAA-888A063132AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B93D4338-6789-43AE-AFAA-888A063132AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B93D4338-6789-43AE-AFAA-888A063132AF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
