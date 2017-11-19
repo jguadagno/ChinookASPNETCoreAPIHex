@@ -24,7 +24,7 @@ namespace Chinook.IntegrationTest.API
         public async Task AlbumGetAllTestAsync(string method)
         {
             // Arrange
-            var request = new HttpRequestMessage(new HttpMethod(method), $"/api/Artist/");
+            var request = new HttpRequestMessage(new HttpMethod(method), "/api/Artist/");
 
             // Act
             var response = await _client.SendAsync(request);

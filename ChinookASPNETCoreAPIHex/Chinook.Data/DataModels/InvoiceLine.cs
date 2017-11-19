@@ -1,6 +1,6 @@
 ﻿namespace Chinook.Data.DataModels
 {
-    public class InvoiceLine
+    public sealed class InvoiceLine
     {
         public int InvoiceLineId { get; set; }
         public int InvoiceId { get; set; }
@@ -8,7 +8,7 @@
         public decimal UnitPrice { get; set; }
         public int Quantity { get; set; }
 
-        public virtual Invoice Invoice { get; set; }
-        public virtual Track Track { get; set; }
+        public Invoice Invoice { get; set; }
+        public Track Track { get; set; }
     }
 }

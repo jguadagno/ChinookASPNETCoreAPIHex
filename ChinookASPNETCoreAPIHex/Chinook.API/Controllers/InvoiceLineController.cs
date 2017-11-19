@@ -15,18 +15,16 @@ namespace Chinook.API.Controllers
     [Route("api/[controller]")]
     public class InvoiceLineController : Controller
     {
-        public readonly IInvoiceLineRepository InvoiceLineRepository;
-        public readonly IInvoiceRepository InvoiceRepository;
-        public readonly ITrackRepository TrackRepository;
-        public IMapper Mapper { get; }
+        private readonly IInvoiceLineRepository _invoiceLineRepository;
+        private readonly IInvoiceRepository _invoiceRepository;
+        private readonly ITrackRepository _trackRepository;
 
-        public InvoiceLineController(IInvoiceLineRepository invoiceLineRepository, IMapper mapper,
+        public InvoiceLineController(IInvoiceLineRepository invoiceLineRepository,
             IInvoiceRepository invoiceRepository, ITrackRepository trackRepository)
         {
-            InvoiceLineRepository = invoiceLineRepository;
-            InvoiceRepository = invoiceRepository;
-            TrackRepository = trackRepository;
-            Mapper = mapper;
+            _invoiceLineRepository = invoiceLineRepository;
+            _invoiceRepository = invoiceRepository;
+            _trackRepository = trackRepository;
         }
 
         [HttpGet]
@@ -35,7 +33,7 @@ namespace Chinook.API.Controllers
         {
             try
             {
-                return new ObjectResult(await InvoiceLineRepository.GetAllAsync(ct));
+                return new ObjectResult(await _invoiceLineRepository.GetAllAsync(ct));
             }
             catch (Exception ex)
             {
@@ -49,11 +47,11 @@ namespace Chinook.API.Controllers
         {
             try
             {
-                if (await InvoiceLineRepository.GetByIdAsync(id, ct) == null)
+                if (await _invoiceLineRepository.GetByIdAsync(id, ct) == null)
                 {
                     return NotFound();
                 }
-                return Ok(await InvoiceLineRepository.GetByIdAsync(id, ct));
+                return Ok(await _invoiceLineRepository.GetByIdAsync(id, ct));
             }
             catch (Exception ex)
             {
@@ -67,11 +65,11 @@ namespace Chinook.API.Controllers
         {
             try
             {
-                if (await InvoiceRepository.GetByIdAsync(id, ct) == null)
+                if (await _invoiceRepository.GetByIdAsync(id, ct) == null)
                 {
                     return NotFound();
                 }
-                return Ok(await InvoiceLineRepository.GetByInvoiceIdAsync(id, ct));
+                return Ok(await _invoiceLineRepository.GetByInvoiceIdAsync(id, ct));
             }
             catch (Exception ex)
             {
@@ -85,11 +83,11 @@ namespace Chinook.API.Controllers
         {
             try
             {
-                if (await TrackRepository.GetByIdAsync(id, ct) == null)
+                if (await _trackRepository.GetByIdAsync(id, ct) == null)
                 {
                     return NotFound();
                 }
-                return Ok(await InvoiceLineRepository.GetByTrackIdAsync(id, ct));
+                return Ok(await _invoiceLineRepository.GetByTrackIdAsync(id, ct));
             }
             catch (Exception ex)
             {
@@ -113,7 +111,7 @@ namespace Chinook.API.Controllers
                     Quantity = input.Quantity
                 };
 
-                return Ok(await InvoiceLineRepository.AddAsync(invoiceLine, ct));
+                return Ok(await _invoiceLineRepository.AddAsync(invoiceLine, ct));
             }
             catch (Exception ex)
             {
@@ -129,7 +127,7 @@ namespace Chinook.API.Controllers
             {
                 if (input == null)
                     return BadRequest();
-                if (await InvoiceLineRepository.GetByIdAsync(id, ct) == null)
+                if (await _invoiceLineRepository.GetByIdAsync(id, ct) == null)
                 {
                     return NotFound();
                 }
@@ -138,7 +136,7 @@ namespace Chinook.API.Controllers
                 .Select(error => error.ErrorMessage));
                 Debug.WriteLine(errors);
 
-                var currentValues = await InvoiceLineRepository.GetByIdAsync(id, ct);
+                var currentValues = await _invoiceLineRepository.GetByIdAsync(id, ct);
 
                 currentValues.InvoiceLineId = input.InvoiceLineId;
                 currentValues.InvoiceId = input.InvoiceId;
@@ -146,7 +144,7 @@ namespace Chinook.API.Controllers
                 currentValues.UnitPrice = input.UnitPrice;
                 currentValues.Quantity = input.Quantity;
 
-                return Ok(await InvoiceLineRepository.UpdateAsync(currentValues, ct));
+                return Ok(await _invoiceLineRepository.UpdateAsync(currentValues, ct));
             }
             catch (Exception ex)
             {
@@ -159,11 +157,11 @@ namespace Chinook.API.Controllers
         {
             try
             {
-                if (await InvoiceLineRepository.GetByIdAsync(id, ct) == null)
+                if (await _invoiceLineRepository.GetByIdAsync(id, ct) == null)
                 {
                     return NotFound();
                 }
-                return Ok(await InvoiceLineRepository.DeleteAsync(id, ct));
+                return Ok(await _invoiceLineRepository.DeleteAsync(id, ct));
             }
             catch (Exception ex)
             {

@@ -43,12 +43,6 @@ namespace Chinook.MockData.Repositories
 
         public async Task<Album> AddAsync(Album newAlbum, CancellationToken ct = default(CancellationToken))
         {
-            var album = new DataModels.Album
-            {
-                Title = newAlbum.Title,
-                ArtistId = newAlbum.ArtistId
-            };
-
             newAlbum.AlbumId = 1;
             return newAlbum;
         }

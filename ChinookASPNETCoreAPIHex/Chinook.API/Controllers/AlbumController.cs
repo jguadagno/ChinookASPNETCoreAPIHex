@@ -15,15 +15,13 @@ namespace Chinook.API.Controllers
     [Route("api/[controller]")]
     public class AlbumController : Controller
     {
-        public readonly IAlbumRepository AlbumRepository;
-        public readonly IArtistRepository ArtistRepository;
-        public IMapper Mapper { get; }
+        private readonly IAlbumRepository _albumRepository;
+        private readonly IArtistRepository _artistRepository;
 
-        public AlbumController(IAlbumRepository albumRepository, IMapper mapper, IArtistRepository artistRepository)
+        public AlbumController(IAlbumRepository albumRepository, IArtistRepository artistRepository)
         {
-            AlbumRepository = albumRepository;
-            ArtistRepository = artistRepository;
-            Mapper = mapper;
+            _albumRepository = albumRepository;
+            _artistRepository = artistRepository;
         }
 
         [HttpGet]
@@ -32,7 +30,7 @@ namespace Chinook.API.Controllers
         {
             try
             {
-                return new ObjectResult(await AlbumRepository.GetAllAsync(sortOrder, searchString, page, pageSize, ct));
+                return new ObjectResult(await _albumRepository.GetAllAsync(sortOrder, searchString, page, pageSize, ct));
             }
             catch (Exception ex)
             {
@@ -46,11 +44,11 @@ namespace Chinook.API.Controllers
         {
             try
             {
-                if (await AlbumRepository.GetByIdAsync(id, ct) == null)
+                if (await _albumRepository.GetByIdAsync(id, ct) == null)
                 {
                     return NotFound();
                 }
-                return Ok(await AlbumRepository.GetByIdAsync(id, ct));
+                return Ok(await _albumRepository.GetByIdAsync(id, ct));
             }
             catch (Exception ex)
             {
@@ -64,11 +62,11 @@ namespace Chinook.API.Controllers
         {
             try
             {
-                if (await ArtistRepository.GetByIdAsync(id, ct) == null)
+                if (await _artistRepository.GetByIdAsync(id, ct) == null)
                 {
                     return NotFound();
                 }
-                return Ok(await AlbumRepository.GetByArtistIdAsync(id, ct));
+                return Ok(await _albumRepository.GetByArtistIdAsync(id, ct));
             }
             catch (Exception ex)
             {
@@ -91,7 +89,7 @@ namespace Chinook.API.Controllers
 
                 };
 
-                return Ok(await AlbumRepository.AddAsync(album, ct));
+                return Ok(await _albumRepository.AddAsync(album, ct));
             }
             catch (Exception ex)
             {
@@ -107,7 +105,7 @@ namespace Chinook.API.Controllers
             {
                 if (input == null)
                     return BadRequest();
-                if (await AlbumRepository.GetByIdAsync(id, ct) == null)
+                if (await _albumRepository.GetByIdAsync(id, ct) == null)
                 {
                     return NotFound();
                 }
@@ -116,12 +114,12 @@ namespace Chinook.API.Controllers
                 .Select(error => error.ErrorMessage));
                 Debug.WriteLine(errors);
 
-                var currentValues = await AlbumRepository.GetByIdAsync(id, ct);
+                var currentValues = await _albumRepository.GetByIdAsync(id, ct);
 
                 currentValues.Title = input.Title;
                 currentValues.ArtistId = input.ArtistId;
 
-                return Ok(await AlbumRepository.UpdateAsync(currentValues, ct));
+                return Ok(await _albumRepository.UpdateAsync(currentValues, ct));
             }
             catch (Exception ex)
             {
@@ -134,11 +132,11 @@ namespace Chinook.API.Controllers
         {
             try
             {
-                if (await AlbumRepository.GetByIdAsync(id, ct) == null)
+                if (await _albumRepository.GetByIdAsync(id, ct) == null)
                 {
                     return NotFound();
                 }
-                return Ok(await AlbumRepository.DeleteAsync(id, ct));
+                return Ok(await _albumRepository.DeleteAsync(id, ct));
             }
             catch (Exception ex)
             {

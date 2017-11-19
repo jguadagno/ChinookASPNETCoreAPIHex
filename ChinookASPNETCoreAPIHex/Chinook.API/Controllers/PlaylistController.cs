@@ -15,13 +15,11 @@ namespace Chinook.API.Controllers
     [Route("api/[controller]")]
     public class PlaylistController : Controller
     {
-        public readonly IPlaylistRepository PlaylistRepository;
-        public IMapper Mapper { get; }
+        private readonly IPlaylistRepository _playlistRepository;
 
-        public PlaylistController(IPlaylistRepository playlistRepository, IMapper mapper)
+        public PlaylistController(IPlaylistRepository playlistRepository)
         {
-            PlaylistRepository = playlistRepository;
-            Mapper = mapper;
+            _playlistRepository = playlistRepository;
         }
 
         [HttpGet]
@@ -30,7 +28,7 @@ namespace Chinook.API.Controllers
         {
             try
             {
-                return new ObjectResult(await PlaylistRepository.GetAllAsync(ct));
+                return new ObjectResult(await _playlistRepository.GetAllAsync(ct));
             }
             catch (Exception ex)
             {
@@ -44,11 +42,11 @@ namespace Chinook.API.Controllers
         {
             try
             {
-                if (await PlaylistRepository.GetByIdAsync(id, ct) == null)
+                if (await _playlistRepository.GetByIdAsync(id, ct) == null)
                 {
                     return NotFound();
                 }
-                return Ok(await PlaylistRepository.GetByIdAsync(id, ct));
+                return Ok(await _playlistRepository.GetByIdAsync(id, ct));
             }
             catch (Exception ex)
             {
@@ -69,7 +67,7 @@ namespace Chinook.API.Controllers
                     Name = input.Name
                 };
 
-                return Ok(await PlaylistRepository.AddAsync(playlist, ct));
+                return Ok(await _playlistRepository.AddAsync(playlist, ct));
             }
             catch (Exception ex)
             {
@@ -85,7 +83,7 @@ namespace Chinook.API.Controllers
             {
                 if (input == null)
                     return BadRequest();
-                if (await PlaylistRepository.GetByIdAsync(id, ct) == null)
+                if (await _playlistRepository.GetByIdAsync(id, ct) == null)
                 {
                     return NotFound();
                 }
@@ -94,12 +92,12 @@ namespace Chinook.API.Controllers
                 .Select(error => error.ErrorMessage));
                 Debug.WriteLine(errors);
 
-                var currentValues = await PlaylistRepository.GetByIdAsync(id, ct);
+                var currentValues = await _playlistRepository.GetByIdAsync(id, ct);
 
                 currentValues.PlaylistId = input.PlaylistId;
                 currentValues.Name = input.Name;
 
-                return Ok(await PlaylistRepository.UpdateAsync(currentValues, ct));
+                return Ok(await _playlistRepository.UpdateAsync(currentValues, ct));
             }
             catch (Exception ex)
             {
@@ -112,11 +110,11 @@ namespace Chinook.API.Controllers
         {
             try
             {
-                if (await PlaylistRepository.GetByIdAsync(id, ct) == null)
+                if (await _playlistRepository.GetByIdAsync(id, ct) == null)
                 {
                     return NotFound();
                 }
-                return Ok(await PlaylistRepository.DeleteAsync(id, ct));
+                return Ok(await _playlistRepository.DeleteAsync(id, ct));
             }
             catch (Exception ex)
             {

@@ -3,7 +3,7 @@ using Chinook.Data.DataModels;
 
 namespace Chinook.API.ViewModels
 {
-    public class TrackViewModel
+    public sealed class TrackViewModel
     {
         public int TrackId { get; set; }
         public string Name { get; set; }
@@ -18,10 +18,10 @@ namespace Chinook.API.ViewModels
         public int Bytes { get; set; }
         public decimal UnitPrice { get; set; }
 
-        public virtual IList<InvoiceLine> InvoiceLines { get; set; }
-        public virtual IList<PlaylistTrack> PlaylistTracks { get; set; }
-        public virtual Album Album { get; set; }
-        public virtual Genre Genre { get; set; }
-        public virtual MediaType MediaType { get; set; }
+        public IList<InvoiceLine> InvoiceLines { get; set; }
+        public IList<PlaylistTrack> PlaylistTracks { get; set; }
+        public Album Album { get; set; }
+        public Genre Genre { get; set; }
+        public MediaType MediaType { get; set; }
     }
 }

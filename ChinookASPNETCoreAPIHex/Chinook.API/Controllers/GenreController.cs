@@ -15,13 +15,11 @@ namespace Chinook.API.Controllers
     [Route("api/[controller]")]
     public class GenreController : Controller
     {
-        public readonly IGenreRepository GenreRepository;
-        public IMapper Mapper { get; }
+        private readonly IGenreRepository _genreRepository;
 
-        public GenreController(IGenreRepository genreRepository, IMapper mapper)
+        public GenreController(IGenreRepository genreRepository)
         {
-            GenreRepository = genreRepository;
-            Mapper = mapper;
+            _genreRepository = genreRepository;
         }
 
         [HttpGet]
@@ -30,7 +28,7 @@ namespace Chinook.API.Controllers
         {
             try
             {
-                return new ObjectResult(await GenreRepository.GetAllAsync(ct));
+                return new ObjectResult(await _genreRepository.GetAllAsync(ct));
             }
             catch (Exception ex)
             {
@@ -44,11 +42,11 @@ namespace Chinook.API.Controllers
         {
             try
             {
-                if (await GenreRepository.GetByIdAsync(id, ct) == null)
+                if (await _genreRepository.GetByIdAsync(id, ct) == null)
                 {
                     return NotFound();
                 }
-                return Ok(await GenreRepository.GetByIdAsync(id, ct));
+                return Ok(await _genreRepository.GetByIdAsync(id, ct));
             }
             catch (Exception ex)
             {
@@ -70,7 +68,7 @@ namespace Chinook.API.Controllers
 
                 };
 
-                return Ok(await GenreRepository.AddAsync(genre, ct));
+                return Ok(await _genreRepository.AddAsync(genre, ct));
             }
             catch (Exception ex)
             {
@@ -86,7 +84,7 @@ namespace Chinook.API.Controllers
             {
                 if (input == null)
                     return BadRequest();
-                if (await GenreRepository.GetByIdAsync(id, ct) == null)
+                if (await _genreRepository.GetByIdAsync(id, ct) == null)
                 {
                     return NotFound();
                 }
@@ -95,12 +93,12 @@ namespace Chinook.API.Controllers
                 .Select(error => error.ErrorMessage));
                 Debug.WriteLine(errors);
 
-                var currentValues = await GenreRepository.GetByIdAsync(id, ct);
+                var currentValues = await _genreRepository.GetByIdAsync(id, ct);
 
                 currentValues.GenreId = input.GenreId;
                 currentValues.Name = input.Name;
 
-                return Ok(await GenreRepository.UpdateAsync(currentValues, ct));
+                return Ok(await _genreRepository.UpdateAsync(currentValues, ct));
             }
             catch (Exception ex)
             {
@@ -113,11 +111,11 @@ namespace Chinook.API.Controllers
         {
             try
             {
-                if (await GenreRepository.GetByIdAsync(id, ct) == null)
+                if (await _genreRepository.GetByIdAsync(id, ct) == null)
                 {
                     return NotFound();
                 }
-                return Ok(await GenreRepository.DeleteAsync(id, ct));
+                return Ok(await _genreRepository.DeleteAsync(id, ct));
             }
             catch (Exception ex)
             {

@@ -1,11 +1,11 @@
 ﻿namespace Chinook.Data.DataModels
 {
-    public class PlaylistTrack
+    public sealed class PlaylistTrack
     {
         public int PlaylistId { get; set; }
         public int TrackId { get; set; }
 
-        public virtual Playlist Playlist { get; set; }
-        public virtual Track Track { get; set; }
+        public Playlist Playlist { get; set; }
+        public Track Track { get; set; }
     }
 }

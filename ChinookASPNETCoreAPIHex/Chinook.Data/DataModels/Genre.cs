@@ -2,11 +2,11 @@
 
 namespace Chinook.Data.DataModels
 {
-    public class Genre
+    public sealed class Genre
     {
         public int GenreId { get; set; }
         public string Name { get; set; }
 
-        public virtual ICollection<Track> Tracks { get; set; } = new HashSet<Track>();
+        public ICollection<Track> Tracks { get; set; } = new HashSet<Track>();
     }
 }

@@ -14,7 +14,7 @@ namespace Chinook.UnitTest.Repository
         }
 
         [Fact]
-        public async Task enreGetAllAsync()
+        public async Task GenreGetAllAsync()
         {
             // Act
             var genres = await _repo.GetAllAsync();

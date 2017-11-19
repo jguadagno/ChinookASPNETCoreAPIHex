@@ -11,7 +11,7 @@ namespace Chinook.API
 {
     public class Startup
     {
-        public IConfiguration Configuration { get; }
+        private IConfiguration Configuration { get; }
         private IHostingEnvironment _env;
 
         public Startup(IHostingEnvironment env)

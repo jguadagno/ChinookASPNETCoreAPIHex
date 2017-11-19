@@ -9,13 +9,6 @@ namespace Chinook.MockData.Repositories
 {
     public class GenreRepository : IGenreRepository
     {
-        
-
-        public GenreRepository()
-        {
-            
-        }
-
         public void Dispose()
         {
             

@@ -15,13 +15,11 @@ namespace Chinook.API.Controllers
     [Route("api/[controller]")]
     public class MediaTypeController : Controller
     {
-        public readonly IMediaTypeRepository MediaTypeRepository;
-        public IMapper Mapper { get; }
+        private readonly IMediaTypeRepository _mediaTypeRepository;
 
-        public MediaTypeController(IMediaTypeRepository mediaTypeRepository, IMapper mapper)
+        public MediaTypeController(IMediaTypeRepository mediaTypeRepository)
         {
-            MediaTypeRepository = mediaTypeRepository;
-            Mapper = mapper;
+            _mediaTypeRepository = mediaTypeRepository;
         }
 
         [HttpGet]
@@ -30,7 +28,7 @@ namespace Chinook.API.Controllers
         {
             try
             {
-                return new ObjectResult(await MediaTypeRepository.GetAllAsync(ct));
+                return new ObjectResult(await _mediaTypeRepository.GetAllAsync(ct));
             }
             catch (Exception ex)
             {
@@ -44,11 +42,11 @@ namespace Chinook.API.Controllers
         {
             try
             {
-                if (await MediaTypeRepository.GetByIdAsync(id, ct) == null)
+                if (await _mediaTypeRepository.GetByIdAsync(id, ct) == null)
                 {
                     return NotFound();
                 }
-                return Ok(await MediaTypeRepository.GetByIdAsync(id, ct));
+                return Ok(await _mediaTypeRepository.GetByIdAsync(id, ct));
             }
             catch (Exception ex)
             {
@@ -70,7 +68,7 @@ namespace Chinook.API.Controllers
 
                 };
 
-                return Ok(await MediaTypeRepository.AddAsync(mediaType, ct));
+                return Ok(await _mediaTypeRepository.AddAsync(mediaType, ct));
             }
             catch (Exception ex)
             {
@@ -86,7 +84,7 @@ namespace Chinook.API.Controllers
             {
                 if (input == null)
                     return BadRequest();
-                if (await MediaTypeRepository.GetByIdAsync(id, ct) == null)
+                if (await _mediaTypeRepository.GetByIdAsync(id, ct) == null)
                 {
                     return NotFound();
                 }
@@ -95,12 +93,12 @@ namespace Chinook.API.Controllers
                 .Select(error => error.ErrorMessage));
                 Debug.WriteLine(errors);
 
-                var currentValues = await MediaTypeRepository.GetByIdAsync(id, ct);
+                var currentValues = await _mediaTypeRepository.GetByIdAsync(id, ct);
 
                 currentValues.MediaTypeId = input.MediaTypeId;
                 currentValues.Name = input.Name;
 
-                return Ok(await MediaTypeRepository.UpdateAsync(currentValues, ct));
+                return Ok(await _mediaTypeRepository.UpdateAsync(currentValues, ct));
             }
             catch (Exception ex)
             {
@@ -113,11 +111,11 @@ namespace Chinook.API.Controllers
         {
             try
             {
-                if (await MediaTypeRepository.GetByIdAsync(id, ct) == null)
+                if (await _mediaTypeRepository.GetByIdAsync(id, ct) == null)
                 {
                     return NotFound();
                 }
-                return Ok(await MediaTypeRepository.DeleteAsync(id, ct));
+                return Ok(await _mediaTypeRepository.DeleteAsync(id, ct));
             }
             catch (Exception ex)
             {

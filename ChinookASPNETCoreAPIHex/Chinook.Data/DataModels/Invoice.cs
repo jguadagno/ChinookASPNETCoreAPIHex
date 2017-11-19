@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Chinook.Data.DataModels
 {
-    public class Invoice
+    public sealed class Invoice
     {
         public int InvoiceId { get; set; }
         public int CustomerId { get; set; }
@@ -15,7 +15,7 @@ namespace Chinook.Data.DataModels
         public string BillingPostalCode { get; set; }
         public decimal Total { get; set; }
 
-        public virtual ICollection<InvoiceLine> InvoiceLines { get; set; } = new HashSet<InvoiceLine>();
-        public virtual Customer Customer { get; set; }
+        public ICollection<InvoiceLine> InvoiceLines { get; set; } = new HashSet<InvoiceLine>();
+        public Customer Customer { get; set; }
     }
 }

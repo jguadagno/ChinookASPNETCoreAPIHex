@@ -4,7 +4,7 @@ using Chinook.Data.DataModels;
 
 namespace Chinook.API.ViewModels
 {
-    public class InvoiceViewModel
+    public sealed class InvoiceViewModel
     {
         public int InvoiceId { get; set; }
         public int CustomerId { get; set; }
@@ -18,6 +18,6 @@ namespace Chinook.API.ViewModels
         public decimal Total { get; set; }
 
         public IList<InvoiceLine> InvoiceLines { get; set; }
-        public virtual Customer Customer { get; set; }
+        public Customer Customer { get; set; }
     }
 }

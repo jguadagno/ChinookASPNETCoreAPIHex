@@ -14,7 +14,7 @@ namespace Chinook.API.Mapping
         {
             if (services == null)
             {
-                throw new ArgumentNullException("services");
+                throw new ArgumentNullException(nameof(services));
             }
 
             services.AddSingleton(GetConfiguration().CreateMapper());
@@ -22,7 +22,7 @@ namespace Chinook.API.Mapping
             return services;
         }
 
-        public static MapperConfiguration GetConfiguration()
+        private static MapperConfiguration GetConfiguration()
         {
             return _configuration ?? (_configuration = new MapperConfiguration(_ =>
             {

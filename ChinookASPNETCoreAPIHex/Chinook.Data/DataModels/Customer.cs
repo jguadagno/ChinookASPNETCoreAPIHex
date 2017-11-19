@@ -2,7 +2,7 @@
 
 namespace Chinook.Data.DataModels
 {
-    public class Customer
+    public sealed class Customer
     {
         public int CustomerId { get; set; }
         public string FirstName { get; set; }
@@ -18,7 +18,7 @@ namespace Chinook.Data.DataModels
         public string Email { get; set; }
         public int? SupportRepId { get; set; }
 
-        public virtual ICollection<Invoice> Invoices { get; set; } = new HashSet<Invoice>();
-        public virtual Employee SupportRep { get; set; }
+        public ICollection<Invoice> Invoices { get; set; } = new HashSet<Invoice>();
+        public Employee SupportRep { get; set; }
     }
 }

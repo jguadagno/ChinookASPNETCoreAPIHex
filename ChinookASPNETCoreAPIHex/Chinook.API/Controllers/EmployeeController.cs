@@ -15,13 +15,11 @@ namespace Chinook.API.Controllers
     [Route("api/[controller]")]
     public class EmployeeController : Controller
     {
-        public readonly IEmployeeRepository EmployeeRepository;
-        public IMapper Mapper { get; }
+        private readonly IEmployeeRepository _employeeRepository;
 
-        public EmployeeController(IEmployeeRepository employeeRepository, IMapper mapper)
+        public EmployeeController(IEmployeeRepository employeeRepository)
         {
-            EmployeeRepository = employeeRepository;
-            Mapper = mapper;
+            _employeeRepository = employeeRepository;
         }
 
         [HttpGet]
@@ -30,7 +28,7 @@ namespace Chinook.API.Controllers
         {
             try
             {
-                return new ObjectResult(await EmployeeRepository.GetAllAsync(ct));
+                return new ObjectResult(await _employeeRepository.GetAllAsync(ct));
             }
             catch (Exception ex)
             {
@@ -44,11 +42,11 @@ namespace Chinook.API.Controllers
         {
             try
             {
-                if (await EmployeeRepository.GetByIdAsync(id, ct) == null)
+                if (await _employeeRepository.GetByIdAsync(id, ct) == null)
                 {
                     return NotFound();
                 }
-                return Ok(await EmployeeRepository.GetByIdAsync(id, ct));
+                return Ok(await _employeeRepository.GetByIdAsync(id, ct));
             }
             catch (Exception ex)
             {
@@ -62,11 +60,11 @@ namespace Chinook.API.Controllers
         {
             try
             {
-                if (await EmployeeRepository.GetByIdAsync(id, ct) == null)
+                if (await _employeeRepository.GetByIdAsync(id, ct) == null)
                 {
                     return NotFound();
                 }
-                return Ok(await EmployeeRepository.GetReportsToAsync(id, ct));
+                return Ok(await _employeeRepository.GetReportsToAsync(id, ct));
             }
             catch (Exception ex)
             {
@@ -100,7 +98,7 @@ namespace Chinook.API.Controllers
                     Email = input.Email
                 };
 
-                return Ok(await EmployeeRepository.AddAsync(employee, ct));
+                return Ok(await _employeeRepository.AddAsync(employee, ct));
             }
             catch (Exception ex)
             {
@@ -116,7 +114,7 @@ namespace Chinook.API.Controllers
             {
                 if (input == null)
                     return BadRequest();
-                if (await EmployeeRepository.GetByIdAsync(id, ct) == null)
+                if (await _employeeRepository.GetByIdAsync(id, ct) == null)
                 {
                     return NotFound();
                 }
@@ -125,7 +123,7 @@ namespace Chinook.API.Controllers
                 .Select(error => error.ErrorMessage));
                 Debug.WriteLine(errors);
 
-                var currentValues = await EmployeeRepository.GetByIdAsync(id, ct);
+                var currentValues = await _employeeRepository.GetByIdAsync(id, ct);
 
                 currentValues.EmployeeId = input.EmployeeId;
                 currentValues.LastName = input.LastName;
@@ -143,7 +141,7 @@ namespace Chinook.API.Controllers
                 currentValues.Fax = input.Fax;
                 currentValues.Email = input.Email;
 
-                return Ok(await EmployeeRepository.UpdateAsync(currentValues, ct));
+                return Ok(await _employeeRepository.UpdateAsync(currentValues, ct));
             }
             catch (Exception ex)
             {
@@ -156,11 +154,11 @@ namespace Chinook.API.Controllers
         {
             try
             {
-                if (await EmployeeRepository.GetByIdAsync(id, ct) == null)
+                if (await _employeeRepository.GetByIdAsync(id, ct) == null)
                 {
                     return NotFound();
                 }
-                return Ok(await EmployeeRepository.DeleteAsync(id, ct));
+                return Ok(await _employeeRepository.DeleteAsync(id, ct));
             }
             catch (Exception ex)
             {

@@ -2,7 +2,7 @@
 
 namespace Chinook.Data.DataModels
 {
-    public class Track
+    public sealed class Track
     {
         public int TrackId { get; set; }
         public string Name { get; set; }
@@ -14,10 +14,10 @@ namespace Chinook.Data.DataModels
         public int Bytes { get; set; }
         public decimal UnitPrice { get; set; }
 
-        public virtual ICollection<InvoiceLine> InvoiceLines { get; set; } = new HashSet<InvoiceLine>();
-        public virtual ICollection<PlaylistTrack> PlaylistTracks { get; set; } = new HashSet<PlaylistTrack>();
-        public virtual Album Album { get; set; }
-        public virtual Genre Genre { get; set; }
-        public virtual MediaType MediaType { get; set; }
+        public ICollection<InvoiceLine> InvoiceLines { get; set; } = new HashSet<InvoiceLine>();
+        public ICollection<PlaylistTrack> PlaylistTracks { get; set; } = new HashSet<PlaylistTrack>();
+        public Album Album { get; set; }
+        public Genre Genre { get; set; }
+        public MediaType MediaType { get; set; }
     }
 }

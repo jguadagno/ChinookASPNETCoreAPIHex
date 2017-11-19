@@ -15,15 +15,13 @@ namespace Chinook.API.Controllers
     [Route("api/[controller]")]
     public class CustomerController : Controller
     {
-        public readonly ICustomerRepository CustomerRepository;
-        public readonly IEmployeeRepository EmployeeRepository;
-        public IMapper Mapper { get; }
+        private readonly ICustomerRepository _customerRepository;
+        private readonly IEmployeeRepository _employeeRepository;
 
-        public CustomerController(ICustomerRepository customerRepository, IMapper mapper, IEmployeeRepository employeeRepository)
+        public CustomerController(ICustomerRepository customerRepository, IEmployeeRepository employeeRepository)
         {
-            CustomerRepository = customerRepository;
-            EmployeeRepository = employeeRepository;
-            Mapper = mapper;
+            _customerRepository = customerRepository;
+            _employeeRepository = employeeRepository;
         }
 
         [HttpGet]
@@ -32,7 +30,7 @@ namespace Chinook.API.Controllers
         {
             try
             {
-                return new ObjectResult(await CustomerRepository.GetAllAsync(ct));
+                return new ObjectResult(await _customerRepository.GetAllAsync(ct));
             }
             catch (Exception ex)
             {
@@ -46,11 +44,11 @@ namespace Chinook.API.Controllers
         {
             try
             {
-                if (await CustomerRepository.GetByIdAsync(id, ct) == null)
+                if (await _customerRepository.GetByIdAsync(id, ct) == null)
                 {
                     return NotFound();
                 }
-                return Ok(await CustomerRepository.GetByIdAsync(id, ct));
+                return Ok(await _customerRepository.GetByIdAsync(id, ct));
             }
             catch (Exception ex)
             {
@@ -64,11 +62,11 @@ namespace Chinook.API.Controllers
         {
             try
             {
-                if (await EmployeeRepository.GetByIdAsync(id, ct) == null)
+                if (await _employeeRepository.GetByIdAsync(id, ct) == null)
                 {
                     return NotFound();
                 }
-                return Ok(await CustomerRepository.GetBySupportRepIdAsync(id, ct));
+                return Ok(await _customerRepository.GetBySupportRepIdAsync(id, ct));
             }
             catch (Exception ex)
             {
@@ -100,7 +98,7 @@ namespace Chinook.API.Controllers
                     SupportRepId = input.SupportRepId
                 };
 
-                return Ok(await CustomerRepository.AddAsync(customer, ct));
+                return Ok(await _customerRepository.AddAsync(customer, ct));
             }
             catch (Exception ex)
             {
@@ -116,7 +114,7 @@ namespace Chinook.API.Controllers
             {
                 if (input == null)
                     return BadRequest();
-                if (await CustomerRepository.GetByIdAsync(id, ct) == null)
+                if (await _customerRepository.GetByIdAsync(id, ct) == null)
                 {
                     return NotFound();
                 }
@@ -125,7 +123,7 @@ namespace Chinook.API.Controllers
                 .Select(error => error.ErrorMessage));
                 Debug.WriteLine(errors);
 
-                var currentValues = await CustomerRepository.GetByIdAsync(id, ct);
+                var currentValues = await _customerRepository.GetByIdAsync(id, ct);
 
                 currentValues.CustomerId = input.CustomerId;
                 currentValues.FirstName = input.FirstName;
@@ -141,7 +139,7 @@ namespace Chinook.API.Controllers
                 currentValues.Email = input.Email;
                 currentValues.SupportRepId = input.SupportRepId;
 
-                return Ok(await CustomerRepository.UpdateAsync(currentValues, ct));
+                return Ok(await _customerRepository.UpdateAsync(currentValues, ct));
             }
             catch (Exception ex)
             {
@@ -154,11 +152,11 @@ namespace Chinook.API.Controllers
         {
             try
             {
-                if (await CustomerRepository.GetByIdAsync(id, ct) == null)
+                if (await _customerRepository.GetByIdAsync(id, ct) == null)
                 {
                     return NotFound();
                 }
-                return Ok(await CustomerRepository.DeleteAsync(id, ct));
+                return Ok(await _customerRepository.DeleteAsync(id, ct));
             }
             catch (Exception ex)
             {

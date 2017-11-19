@@ -15,21 +15,19 @@ namespace Chinook.API.Controllers
     [Route("api/[controller]")]
     public class TrackController : Controller
     {
-        public readonly ITrackRepository TrackRepository;
-        public readonly IAlbumRepository AlbumRepository;
-        public readonly IGenreRepository GenreRepository;
-        public readonly IMediaTypeRepository MediaTypeRepository;
-        public IMapper Mapper { get; }
+        private readonly ITrackRepository _trackRepository;
+        private readonly IAlbumRepository _albumRepository;
+        private readonly IGenreRepository _genreRepository;
+        private readonly IMediaTypeRepository _mediaTypeRepository;
 
-        public TrackController(ITrackRepository trackRepository, IMapper mapper,
+        public TrackController(ITrackRepository trackRepository,
             IAlbumRepository albumRepository, IGenreRepository genreRepository,
             IMediaTypeRepository mediaTypeRepository)
         {
-            TrackRepository = trackRepository;
-            AlbumRepository = albumRepository;
-            GenreRepository = genreRepository;
-            MediaTypeRepository = mediaTypeRepository;
-            Mapper = mapper;
+            _trackRepository = trackRepository;
+            _albumRepository = albumRepository;
+            _genreRepository = genreRepository;
+            _mediaTypeRepository = mediaTypeRepository;
         }
 
         [HttpGet]
@@ -38,7 +36,7 @@ namespace Chinook.API.Controllers
         {
             try
             {
-                return new ObjectResult(await TrackRepository.GetAllAsync(ct));
+                return new ObjectResult(await _trackRepository.GetAllAsync(ct));
             }
             catch (Exception ex)
             {
@@ -52,11 +50,11 @@ namespace Chinook.API.Controllers
         {
             try
             {
-                if (await TrackRepository.GetByIdAsync(id, ct) == null)
+                if (await _trackRepository.GetByIdAsync(id, ct) == null)
                 {
                     return NotFound();
                 }
-                return Ok(await TrackRepository.GetByIdAsync(id, ct));
+                return Ok(await _trackRepository.GetByIdAsync(id, ct));
             }
             catch (Exception ex)
             {
@@ -70,11 +68,11 @@ namespace Chinook.API.Controllers
         {
             try
             {
-                if (await AlbumRepository.GetByIdAsync(id, ct) == null)
+                if (await _albumRepository.GetByIdAsync(id, ct) == null)
                 {
                     return NotFound();
                 }
-                return Ok(await TrackRepository.GetByAlbumIdAsync(id, ct));
+                return Ok(await _trackRepository.GetByAlbumIdAsync(id, ct));
             }
             catch (Exception ex)
             {
@@ -88,11 +86,11 @@ namespace Chinook.API.Controllers
         {
             try
             {
-                if (await MediaTypeRepository.GetByIdAsync(id, ct) == null)
+                if (await _mediaTypeRepository.GetByIdAsync(id, ct) == null)
                 {
                     return NotFound();
                 }
-                return Ok(await TrackRepository.GetByMediaTypeIdAsync(id, ct));
+                return Ok(await _trackRepository.GetByMediaTypeIdAsync(id, ct));
             }
             catch (Exception ex)
             {
@@ -106,11 +104,11 @@ namespace Chinook.API.Controllers
         {
             try
             {
-                if (await GenreRepository.GetByIdAsync(id, ct) == null)
+                if (await _genreRepository.GetByIdAsync(id, ct) == null)
                 {
                     return NotFound();
                 }
-                return Ok(await TrackRepository.GetByGenreIdAsync(id, ct));
+                return Ok(await _trackRepository.GetByGenreIdAsync(id, ct));
             }
             catch (Exception ex)
             {
@@ -139,7 +137,7 @@ namespace Chinook.API.Controllers
 
                 };
 
-                return Ok(await TrackRepository.AddAsync(track, ct));
+                return Ok(await _trackRepository.AddAsync(track, ct));
             }
             catch (Exception ex)
             {
@@ -155,7 +153,7 @@ namespace Chinook.API.Controllers
             {
                 if (input == null)
                     return BadRequest();
-                if (await TrackRepository.GetByIdAsync(id, ct) == null)
+                if (await _trackRepository.GetByIdAsync(id, ct) == null)
                 {
                     return NotFound();
                 }
@@ -164,7 +162,7 @@ namespace Chinook.API.Controllers
                 .Select(error => error.ErrorMessage));
                 Debug.WriteLine(errors);
 
-                var currentValues = await TrackRepository.GetByIdAsync(id, ct);
+                var currentValues = await _trackRepository.GetByIdAsync(id, ct);
 
                 currentValues.TrackId = input.TrackId;
                 currentValues.Name = input.Name;
@@ -176,7 +174,7 @@ namespace Chinook.API.Controllers
                 currentValues.Bytes = input.Bytes;
                 currentValues.UnitPrice = input.UnitPrice;
 
-                return Ok(await TrackRepository.UpdateAsync(currentValues, ct));
+                return Ok(await _trackRepository.UpdateAsync(currentValues, ct));
             }
             catch (Exception ex)
             {
@@ -189,11 +187,11 @@ namespace Chinook.API.Controllers
         {
             try
             {
-                if (await TrackRepository.GetByIdAsync(id, ct) == null)
+                if (await _trackRepository.GetByIdAsync(id, ct) == null)
                 {
                     return NotFound();
                 }
-                return Ok(await TrackRepository.DeleteAsync(id, ct));
+                return Ok(await _trackRepository.DeleteAsync(id, ct));
             }
             catch (Exception ex)
             {
