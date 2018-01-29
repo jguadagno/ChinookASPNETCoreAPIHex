@@ -17,7 +17,7 @@ namespace Chinook.MockData.Repositories
         {
             IList<Album> list = new List<Album>();
 
-            Album album = new Album
+            var album = new Album
             {
                 AlbumId = 1,
                 ArtistId = 1,
@@ -31,7 +31,7 @@ namespace Chinook.MockData.Repositories
 
         public async Task<Album> GetByIdAsync(int id, CancellationToken ct = default(CancellationToken))
         {
-            Album album = new Album
+            var album = new Album
             {
                 AlbumId = id,
                 ArtistId = 1,
@@ -60,7 +60,7 @@ namespace Chinook.MockData.Repositories
         public async Task<List<Album>> GetByArtistIdAsync(int id, CancellationToken ct = default(CancellationToken))
         {
             IList<Album> list = new List<Album>();
-            Album newisd = new Album
+            var newisd = new Album
             {
                 Title = "hello World",
                 ArtistId = 1,

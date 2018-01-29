@@ -1,19 +1,34 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using System.Threading;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
-using Chinook.Domain.Repositories;
-using Chinook.Domain.Entities;
-namespace Chinook.Data.Repositories
+﻿namespace Chinook.Data.Repositories
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    using Chinook.Domain.Entities;
+    using Chinook.Domain.Repositories;
+
+    using Microsoft.EntityFrameworkCore;
+
+    /// <summary>
+    /// The invoice repository.
+    /// </summary>
     public class InvoiceRepository : IInvoiceRepository
     {
+        /// <summary>
+        /// The _context.
+        /// </summary>
         private readonly ChinookContext _context;
 
-        public InvoiceRepository(ChinookContext context)
+        private readonly IInvoiceLineRepository _invoiceLineRepo;
+        private readonly ICustomerRepository _customerRepo;
+
+        public InvoiceRepository(ChinookContext context, IInvoiceLineRepository invoiceLineRepo,
+            ICustomerRepository customerRepo)
         {
             _context = context;
+            _invoiceLineRepo = invoiceLineRepo;
+            _customerRepo = customerRepo;
         }
 
         private async Task<bool> InvoiceExists(int id, CancellationToken ct = default(CancellationToken))
@@ -29,10 +44,11 @@ namespace Chinook.Data.Repositories
         public async Task<List<Invoice>> GetAllAsync(CancellationToken ct = default(CancellationToken))
         {
             IList<Invoice> list = new List<Invoice>();
-            var old = await _context.Invoice.ToListAsync(cancellationToken: ct);
-            foreach (var i in old)
+            var invoices = await _context.Invoice.ToListAsync(cancellationToken: ct);
+            foreach (var i in invoices)
             {
-                var customer = await _context.Customer.FindAsync(i.CustomerId);
+                var customer = await _customerRepo.GetByIdAsync(i.CustomerId, ct);
+                var invoiceLines = await _invoiceLineRepo.GetByInvoiceIdAsync(i.InvoiceId, ct);
                 var invoice = new Invoice
                 {
                     InvoiceId = i.InvoiceId,
@@ -44,17 +60,21 @@ namespace Chinook.Data.Repositories
                     BillingState = i.BillingState,
                     BillingCountry = i.BillingCountry,
                     BillingPostalCode = i.BillingPostalCode,
-                    Total = i.Total
+                    Total = i.Total,
+                    InvoiceLines = invoiceLines,
+                    Customer = customer
                 };
                 list.Add(invoice);
             }
+
             return list.ToList();
         }
 
         public async Task<Invoice> GetByIdAsync(int id, CancellationToken ct = default(CancellationToken))
         {
             var old = await _context.Invoice.FindAsync(id);
-            var customer = await _context.Customer.FindAsync(old.CustomerId);
+            var customer = await _customerRepo.GetByIdAsync(old.CustomerId, ct);
+            var invoiceLines = await _invoiceLineRepo.GetByInvoiceIdAsync(old.InvoiceId, ct);
             var invoice = new Invoice
             {
                 InvoiceId = old.InvoiceId,
@@ -66,7 +86,9 @@ namespace Chinook.Data.Repositories
                 BillingState = old.BillingState,
                 BillingCountry = old.BillingCountry,
                 BillingPostalCode = old.BillingPostalCode,
-                Total = old.Total
+                Total = old.Total,
+                InvoiceLines = invoiceLines,
+                Customer = customer
             };
             return invoice;
         }
@@ -127,10 +149,11 @@ namespace Chinook.Data.Repositories
         {
             IList<Invoice> list = new List<Invoice>();
             var current = await _context.Invoice.Where(a => a.InvoiceId == id).ToListAsync(cancellationToken: ct);
-            foreach (DataModels.Invoice i in current)
+            foreach (var i in current)
             {
-                var customer = await _context.Customer.FindAsync(i.CustomerId);
-                Invoice newisd = new Invoice
+                var customer = await _customerRepo.GetByIdAsync(i.CustomerId, ct);
+                var invoiceLines = await _invoiceLineRepo.GetByInvoiceIdAsync(i.InvoiceId, ct);
+                var newisd = new Invoice
                 {
                     InvoiceId = i.InvoiceId,
                     CustomerId = i.CustomerId,
@@ -141,7 +164,9 @@ namespace Chinook.Data.Repositories
                     BillingState = i.BillingState,
                     BillingCountry = i.BillingCountry,
                     BillingPostalCode = i.BillingPostalCode,
-                    Total = i.Total
+                    Total = i.Total,
+                    InvoiceLines = invoiceLines,
+                    Customer = customer
                 };
                 list.Add(newisd);
             }

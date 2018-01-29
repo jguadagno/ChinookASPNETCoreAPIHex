@@ -17,7 +17,7 @@ namespace Chinook.MockData.Repositories
         public async Task<List<MediaType>> GetAllAsync(CancellationToken ct = default(CancellationToken))
         {
             IList<MediaType> list = new List<MediaType>();
-            MediaType mediaType = new MediaType
+            var mediaType = new MediaType
             {
                 MediaTypeId = 1,
                 Name = "Foo"

@@ -11,10 +11,24 @@ namespace Chinook.Data.Repositories
     public class TrackRepository : ITrackRepository
     {
         private readonly ChinookContext _context;
+        private readonly IInvoiceLineRepository _invoiceLineRepo;
+        private readonly IPlaylistTrackRepository _playlistTrackRepo;
+        private readonly IAlbumRepository _albumRepo;
+        private readonly IGenreRepository _genreRepo;
+        private readonly IMediaTypeRepository _mediaTypeRepo;
 
-        public TrackRepository(ChinookContext context)
+        public TrackRepository(ChinookContext context, IInvoiceLineRepository invoiceLineRepo,
+            IPlaylistTrackRepository playlistTrackRepo,
+            IAlbumRepository albumRepo,
+            IGenreRepository genreRepo,
+            IMediaTypeRepository mediaTypeRepo)
         {
             _context = context;
+            _invoiceLineRepo = invoiceLineRepo;
+            _playlistTrackRepo = playlistTrackRepo;
+            _albumRepo = albumRepo;
+            _genreRepo = genreRepo;
+            _mediaTypeRepo = mediaTypeRepo;
         }
 
         private async Task<bool> TrackExists(int id, CancellationToken ct = default(CancellationToken))
@@ -30,20 +44,29 @@ namespace Chinook.Data.Repositories
         public async Task<List<Track>> GetAllAsync(CancellationToken ct = default(CancellationToken))
         {
             IList<Track> list = new List<Track>();
-            var old = await _context.Track.ToListAsync(cancellationToken: ct);
-            foreach (var i in old)
+            var tracks = await _context.Track.ToListAsync(cancellationToken: ct);
+            foreach (var i in tracks)
             {
-                var album = await _context.Album.FindAsync(i.AlbumId);
-                var mediaType = await _context.MediaType.FindAsync(i.MediaTypeId);
+                var album = await _albumRepo.GetByIdAsync(i.AlbumId, ct);
+                var mediaType = await _mediaTypeRepo.GetByIdAsync(i.MediaTypeId, ct);
+                var invoinceLines = await _invoiceLineRepo.GetByTrackIdAsync(i.TrackId, ct);
+                var playlistTracks = await _playlistTrackRepo.GetByTrackIdAsync(i.TrackId, ct);
+                Genre genre;
                 string genreName;
                 if (i.GenreId != null)
                 {
-                    var genre = await _context.Genre.FindAsync(i.GenreId);
-                    genreName = genre.Name;
+                    var g = await _context.Genre.FindAsync(i.GenreId);
+                    genreName = g.Name;
+                    genre = new Genre
+                    {
+                        GenreId = g.GenreId,
+                        Name = g.Name
+                    };
                 }
                 else
                 {
                     genreName = "";
+                    genre = null;
                 }
                 var track = new Track
                 {
@@ -58,7 +81,12 @@ namespace Chinook.Data.Repositories
                     Composer = i.Composer,
                     Milliseconds = i.Milliseconds,
                     Bytes = i.Bytes,
-                    UnitPrice = i.UnitPrice
+                    UnitPrice = i.UnitPrice,
+                    Genre = genre,
+                    Album = album,
+                    MediaType = mediaType,
+                    InvoiceLines = invoinceLines,
+                    PlaylistTracks = playlistTracks
                 };
                 list.Add(track);
             }
@@ -67,18 +95,27 @@ namespace Chinook.Data.Repositories
 
         public async Task<Track> GetByIdAsync(int id, CancellationToken ct = default(CancellationToken))
         {
-            string genreName;
             var old = await _context.Track.FindAsync(id);
-            var album = await _context.Album.FindAsync(old.AlbumId);
-            var mediaType = await _context.MediaType.FindAsync(old.MediaTypeId);
+            var album = await _albumRepo.GetByIdAsync(old.AlbumId, ct);
+            var mediaType = await _mediaTypeRepo.GetByIdAsync(old.MediaTypeId, ct);
+            var invoinceLines = await _invoiceLineRepo.GetByTrackIdAsync(old.TrackId, ct);
+            var playlistTracks = await _playlistTrackRepo.GetByTrackIdAsync(old.TrackId, ct);
+            Genre genre;
+            string genreName;
             if (old.GenreId != null)
             {
-                var genre = await _context.Genre.FindAsync(old.GenreId);
-                genreName = genre.Name;
+                var g = await _context.Genre.FindAsync(old.GenreId);
+                genreName = g.Name;
+                genre = new Genre
+                {
+                    GenreId = g.GenreId,
+                    Name = g.Name
+                };
             }
             else
             {
                 genreName = "";
+                genre = null;
             }
             var track = new Track
             {
@@ -93,7 +130,12 @@ namespace Chinook.Data.Repositories
                 Composer = old.Composer,
                 Milliseconds = old.Milliseconds,
                 Bytes = old.Bytes,
-                UnitPrice = old.UnitPrice
+                UnitPrice = old.UnitPrice,
+                Genre = genre,
+                Album = album,
+                MediaType = mediaType,
+                InvoiceLines = invoinceLines,
+                PlaylistTracks = playlistTracks
             };
             return track;
         }
@@ -153,12 +195,31 @@ namespace Chinook.Data.Repositories
         {
             IList<Track> list = new List<Track>();
             var current = await _context.Track.Where(a => a.AlbumId == id).ToListAsync(cancellationToken: ct);
-            foreach (DataModels.Track i in current)
+            foreach (var i in current)
             {
-                var album = await _context.Album.FindAsync(i.AlbumId);
-                var mediaType = await _context.MediaType.FindAsync(i.MediaTypeId);
-                var genre = await _context.Genre.FindAsync(i.GenreId);
-                Track newisd = new Track
+                var album = await _albumRepo.GetByIdAsync(i.AlbumId, ct);
+                var mediaType = await _mediaTypeRepo.GetByIdAsync(i.MediaTypeId, ct);
+                var invoinceLines = await _invoiceLineRepo.GetByTrackIdAsync(i.TrackId, ct);
+                var playlistTracks = await _playlistTrackRepo.GetByTrackIdAsync(i.TrackId, ct);
+                Genre genre;
+                string genreName;
+                if (i.GenreId != null)
+                {
+                    var g = await _context.Genre.FindAsync(i.GenreId);
+                    genreName = g.Name;
+                    genre = new Genre
+                    {
+                        GenreId = g.GenreId,
+                        Name = g.Name
+                    };
+                }
+                else
+                {
+                    genreName = "";
+                    genre = null;
+                }
+                
+                var newisd = new Track
                 {
                     TrackId = i.TrackId,
                     Name = i.Name,
@@ -171,7 +232,12 @@ namespace Chinook.Data.Repositories
                     Composer = i.Composer,
                     Milliseconds = i.Milliseconds,
                     Bytes = i.Bytes,
-                    UnitPrice = i.UnitPrice
+                    UnitPrice = i.UnitPrice,
+                    Genre = genre,
+                    Album = album,
+                    MediaType = mediaType,
+                    InvoiceLines = invoinceLines,
+                    PlaylistTracks = playlistTracks
                 };
                 list.Add(newisd);
             }
@@ -184,9 +250,27 @@ namespace Chinook.Data.Repositories
             var current = await _context.Track.Where(a => a.GenreId == id).ToListAsync(cancellationToken: ct);
             foreach (var i in current)
             {
-                var album = await _context.Album.FindAsync(i.AlbumId);
-                var mediaType = await _context.MediaType.FindAsync(i.MediaTypeId);
-                var genre = await _context.Genre.FindAsync(i.GenreId);
+                var album = await _albumRepo.GetByIdAsync(i.AlbumId, ct);
+                var mediaType = await _mediaTypeRepo.GetByIdAsync(i.MediaTypeId, ct);
+                var invoinceLines = await _invoiceLineRepo.GetByTrackIdAsync(i.TrackId, ct);
+                var playlistTracks = await _playlistTrackRepo.GetByTrackIdAsync(i.TrackId, ct);
+                Genre genre;
+                string genreName;
+                if (i.GenreId != null)
+                {
+                    var g = await _context.Genre.FindAsync(i.GenreId);
+                    genreName = g.Name;
+                    genre = new Genre
+                    {
+                        GenreId = g.GenreId,
+                        Name = g.Name
+                    };
+                }
+                else
+                {
+                    genreName = "";
+                    genre = null;
+                }
                 var newisd = new Track
                 {
                     TrackId = i.TrackId,
@@ -200,7 +284,12 @@ namespace Chinook.Data.Repositories
                     Composer = i.Composer,
                     Milliseconds = i.Milliseconds,
                     Bytes = i.Bytes,
-                    UnitPrice = i.UnitPrice
+                    UnitPrice = i.UnitPrice,
+                    Genre = genre,
+                    Album = album,
+                    MediaType = mediaType,
+                    InvoiceLines = invoinceLines,
+                    PlaylistTracks = playlistTracks
                 };
                 list.Add(newisd);
             }
@@ -213,9 +302,27 @@ namespace Chinook.Data.Repositories
             var current = await _context.Track.Where(a => a.MediaTypeId == id).ToListAsync(cancellationToken: ct);
             foreach (var i in current)
             {
-                var album = await _context.Album.FindAsync(i.AlbumId);
-                var mediaType = await _context.MediaType.FindAsync(i.MediaTypeId);
-                var genre = await _context.Genre.FindAsync(i.GenreId);
+                var album = await _albumRepo.GetByIdAsync(i.AlbumId, ct);
+                var mediaType = await _mediaTypeRepo.GetByIdAsync(i.MediaTypeId, ct);
+                var invoinceLines = await _invoiceLineRepo.GetByTrackIdAsync(i.TrackId, ct);
+                var playlistTracks = await _playlistTrackRepo.GetByTrackIdAsync(i.TrackId, ct);
+                Genre genre;
+                string genreName;
+                if (i.GenreId != null)
+                {
+                    var g = await _context.Genre.FindAsync(i.GenreId);
+                    genreName = g.Name;
+                    genre = new Genre
+                    {
+                        GenreId = g.GenreId,
+                        Name = g.Name
+                    };
+                }
+                else
+                {
+                    genreName = "";
+                    genre = null;
+                }
                 var newisd = new Track
                 {
                     TrackId = i.TrackId,
@@ -229,7 +336,12 @@ namespace Chinook.Data.Repositories
                     Composer = i.Composer,
                     Milliseconds = i.Milliseconds,
                     Bytes = i.Bytes,
-                    UnitPrice = i.UnitPrice
+                    UnitPrice = i.UnitPrice,
+                    Genre = genre,
+                    Album = album,
+                    MediaType = mediaType,
+                    InvoiceLines = invoinceLines,
+                    PlaylistTracks = playlistTracks
                 };
                 list.Add(newisd);
             }

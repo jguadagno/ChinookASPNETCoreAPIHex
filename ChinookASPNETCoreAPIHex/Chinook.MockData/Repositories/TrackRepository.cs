@@ -53,7 +53,7 @@ namespace Chinook.MockData.Repositories
         public async Task<List<Track>> GetByAlbumIdAsync(int id, CancellationToken ct = default(CancellationToken))
         {
             IList<Track> list = new List<Track>();
-            Track track = new Track
+            var track = new Track
             {
                 TrackId = id
             };
@@ -64,7 +64,7 @@ namespace Chinook.MockData.Repositories
         public async Task<List<Track>> GetByGenreIdAsync(int id, CancellationToken ct = default(CancellationToken))
         {
             IList<Track> list = new List<Track>();
-            Track track = new Track
+            var track = new Track
             {
                 TrackId = id
             };
@@ -75,7 +75,7 @@ namespace Chinook.MockData.Repositories
         public async Task<List<Track>> GetByMediaTypeIdAsync(int id, CancellationToken ct = default(CancellationToken))
         {
             IList<Track> list = new List<Track>();
-            Track track = new Track
+            var track = new Track
             {
                 TrackId = id
             };

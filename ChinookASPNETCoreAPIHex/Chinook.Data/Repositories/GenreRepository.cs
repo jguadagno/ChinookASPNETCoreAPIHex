@@ -11,10 +11,12 @@ namespace Chinook.Data.Repositories
     public class GenreRepository : IGenreRepository
     {
         private readonly ChinookContext _context;
+        private readonly ITrackRepository _trackRepo;
 
-        public GenreRepository(ChinookContext context)
+        public GenreRepository(ChinookContext context, ITrackRepository trackRepo)
         {
             _context = context;
+            _trackRepo = trackRepo;
         }
 
         private async Task<bool> GenreExists(int id, CancellationToken ct = default(CancellationToken))
@@ -29,19 +31,25 @@ namespace Chinook.Data.Repositories
 
         public async Task<List<Genre>> GetAllAsync(CancellationToken ct = default(CancellationToken))
         {
-            var old = await _context.Genre.ToListAsync(cancellationToken: ct);
-            IList<Genre> list = old.Select(i => new Genre
+            IList<Genre> list = new List<Genre>();
+            var genres = await _context.Genre.ToListAsync(cancellationToken: ct);
+            foreach (var g in genres)
+            {
+                var tracks = await _trackRepo.GetByGenreIdAsync(g.GenreId, ct);
+                var genre = new Genre
                 {
-                    GenreId = i.GenreId,
-                    Name = i.Name
-                })
-                .ToList();
+                    GenreId = g.GenreId,
+                    Name = g.Name
+                };
+                list.Add(genre);
+            }
             return list.ToList();
         }
 
         public async Task<Genre> GetByIdAsync(int id, CancellationToken ct = default(CancellationToken))
         {
             var old = await _context.Genre.FindAsync(id);
+            var tracks = await _trackRepo.GetByGenreIdAsync(old.GenreId, ct);
             var genre = new Genre
             {
                 GenreId = old.GenreId,

@@ -61,17 +61,14 @@ namespace Chinook.MockData.Repositories
             return employee;
         }
         
-        public async Task<List<Employee>> GetDirectReportsAsync(int id,
-            CancellationToken ct = default(CancellationToken))
+        public async Task<List<Employee>> GetDirectReportsAsync(int id, CancellationToken ct = default(CancellationToken))
         {
             IList<Employee> list = new List<Employee>();
-               
             var employee = new Employee
             {
-                EmployeeId = 1
+                EmployeeId = id
             };
             list.Add(employee);
-
             return list.ToList();
         }
     }

@@ -11,10 +11,15 @@ namespace Chinook.Data.Repositories
     public class PlaylistTrackRepository : IPlaylistTrackRepository
     {
         private readonly ChinookContext _context;
+        private readonly IPlaylistRepository _playlistRepo;
+        private readonly ITrackRepository _trackRepository;
 
-        public PlaylistTrackRepository(ChinookContext context)
+        public PlaylistTrackRepository(ChinookContext context, IPlaylistRepository playlistRepo,
+            ITrackRepository trackRepository)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
+            _playlistRepo = playlistRepo;
+            _trackRepository = trackRepository;
         }
 
         private async Task<bool> PlaylistTrackExists(int id, CancellationToken ct = default(CancellationToken))
@@ -30,15 +35,17 @@ namespace Chinook.Data.Repositories
         public async Task<List<PlaylistTrack>> GetAllAsync(CancellationToken ct = default(CancellationToken))
         {
             IList<PlaylistTrack> list = new List<PlaylistTrack>();
-            var old = await _context.PlaylistTrack.ToListAsync(cancellationToken: ct);
-            foreach (var i in old)
+            var playlistTracks = await _context.PlaylistTrack.ToListAsync(cancellationToken: ct);
+            foreach (var i in playlistTracks)
             {
-                var playlist = await _context.Playlist.FindAsync(i.PlaylistId);
-                var track = await _context.Track.FindAsync(i.TrackId);
+                var playlist = await _playlistRepo.GetByIdAsync(i.PlaylistId, ct);
+                var track = await _trackRepository.GetByIdAsync(i.TrackId, ct);
                 var playlistTrack = new PlaylistTrack
                 {
                     PlaylistId = i.PlaylistId,
-                    TrackId = i.TrackId
+                    TrackId = i.TrackId,
+                    Playlist = playlist,
+                    Track = track
                 };
                 list.Add(playlistTrack);
             }
@@ -49,14 +56,16 @@ namespace Chinook.Data.Repositories
         {
             IList<PlaylistTrack> list = new List<PlaylistTrack>();
             var current = await _context.PlaylistTrack.Where(a => a.PlaylistId == id).ToListAsync(cancellationToken: ct);
-            foreach (DataModels.PlaylistTrack i in current)
+            foreach (var i in current)
             {
-                var playlist = await _context.Playlist.FindAsync(i.PlaylistId);
-                var track = await _context.Track.FindAsync(i.TrackId);
-                PlaylistTrack newisd = new PlaylistTrack
+                var playlist = await _playlistRepo.GetByIdAsync(i.PlaylistId, ct);
+                var track = await _trackRepository.GetByIdAsync(i.TrackId, ct);
+                var newisd = new PlaylistTrack
                 {
                     PlaylistId = i.PlaylistId,
-                    TrackId = i.TrackId
+                    TrackId = i.TrackId,
+                    Playlist = playlist,
+                    Track = track
                 };
                 list.Add(newisd);
             }
@@ -67,14 +76,16 @@ namespace Chinook.Data.Repositories
         {
             IList<PlaylistTrack> list = new List<PlaylistTrack>();
             var current = await _context.PlaylistTrack.Where(a => a.TrackId == id).ToListAsync(cancellationToken: ct);
-            foreach (DataModels.PlaylistTrack i in current)
+            foreach (var i in current)
             {
-                var playlist = await _context.Playlist.FindAsync(i.PlaylistId);
-                var track = await _context.Track.FindAsync(i.TrackId);
-                PlaylistTrack newisd = new PlaylistTrack
+                var playlist = await _playlistRepo.GetByIdAsync(i.PlaylistId, ct);
+                var track = await _trackRepository.GetByIdAsync(i.TrackId, ct);
+                var newisd = new PlaylistTrack
                 {
                     PlaylistId = i.PlaylistId,
-                    TrackId = i.TrackId
+                    TrackId = i.TrackId,
+                    Playlist = playlist,
+                    Track = track
                 };
                 list.Add(newisd);
             }

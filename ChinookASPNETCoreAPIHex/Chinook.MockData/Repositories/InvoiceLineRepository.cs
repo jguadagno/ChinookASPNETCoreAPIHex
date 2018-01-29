@@ -52,7 +52,7 @@ namespace Chinook.MockData.Repositories
         public async Task<List<InvoiceLine>> GetByInvoiceIdAsync(int id, CancellationToken ct = default(CancellationToken))
         {
             IList<InvoiceLine> list = new List<InvoiceLine>();
-            InvoiceLine newisd = new InvoiceLine
+            var newisd = new InvoiceLine
             {
                 InvoiceLineId = id
             };
@@ -63,7 +63,7 @@ namespace Chinook.MockData.Repositories
         public async Task<List<InvoiceLine>> GetByTrackIdAsync(int id, CancellationToken ct = default(CancellationToken))
         {
             IList<InvoiceLine> list = new List<InvoiceLine>();
-            InvoiceLine newisd = new InvoiceLine
+            var newisd = new InvoiceLine
             {
                 InvoiceLineId = id
             };

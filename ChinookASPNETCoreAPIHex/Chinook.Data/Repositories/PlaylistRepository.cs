@@ -10,10 +10,12 @@ namespace Chinook.Data.Repositories
     public class PlaylistRepository : IPlaylistRepository
     {
         private readonly ChinookContext _context;
+        private readonly IPlaylistTrackRepository _playlistTracksRepo;
 
-        public PlaylistRepository(ChinookContext context)
+        public PlaylistRepository(ChinookContext context, IPlaylistTrackRepository playlistTracksRepo)
         {
             _context = context;
+            _playlistTracksRepo = playlistTracksRepo;
         }
 
         private async Task<bool> PlaylistExists(int id, CancellationToken ct = default(CancellationToken))
@@ -28,23 +30,32 @@ namespace Chinook.Data.Repositories
 
         public async Task<List<Playlist>> GetAllAsync(CancellationToken ct = default(CancellationToken))
         {
-            var old = await _context.Playlist.ToListAsync(cancellationToken: ct);
-            IList<Playlist> list = old.Select(i => new Playlist
+            IList<Playlist> list = new List<Playlist>();
+            var playlists = await _context.Playlist.ToListAsync(cancellationToken: ct);
+           
+            foreach (var i in playlists)
+            {
+                var playlistTracks = await _playlistTracksRepo.GetByPlaylistIdAsync(i.PlaylistId, ct);
+                var playlist = new Playlist
                 {
                     PlaylistId = i.PlaylistId,
-                    Name = i.Name
-                })
-                .ToList();
+                    Name = i.Name,
+                    PlaylistTracks = playlistTracks
+                };
+                list.Add(playlist);
+            }
             return list.ToList();
         }
 
         public async Task<Playlist> GetByIdAsync(int id, CancellationToken ct = default(CancellationToken))
         {
             var old = await _context.Playlist.FindAsync(id);
+            var playlistTracks = await _playlistTracksRepo.GetByPlaylistIdAsync(old.PlaylistId, ct);
             var playlist = new Playlist
             {
                 PlaylistId = old.PlaylistId,
-                Name = old.Name
+                Name = old.Name,
+                PlaylistTracks = playlistTracks
             };
             return playlist;
         }
