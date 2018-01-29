@@ -22,7 +22,7 @@ namespace Chinook.Data.DataModels
         public string Email { get; set; }
 
         public ICollection<Customer> Customers { get; set; } = new HashSet<Customer>();
-        public Employee ReportsToNavigation { get; set; }
-        public ICollection<Employee> InverseReportsToNavigations { get; set; }
+        public Employee Manager { get; set; }
+        public ICollection<Employee> DirectReports { get; set; }
     }
 }

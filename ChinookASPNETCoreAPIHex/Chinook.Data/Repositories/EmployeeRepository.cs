@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Threading;
 using System.Collections.Generic;
@@ -170,7 +171,7 @@ namespace Chinook.Data.Repositories
         public async Task<Employee> GetReportsToAsync(int id, CancellationToken ct = default(CancellationToken))
         {
             var old = await _context.Employee.FindAsync(id);
-            var reportsTo = await _context.Employee.FindAsync(old.ReportsToNavigation);
+            var reportsTo = await _context.Employee.FindAsync(old.Manager);
             var employee = new Employee
             {
                 EmployeeId = old.EmployeeId,
@@ -191,6 +192,39 @@ namespace Chinook.Data.Repositories
                 Email = old.Email
             };
             return employee;
+        }
+
+        public async Task<List<Employee>> GetDirectReportsAsync(int id,
+            CancellationToken ct = default(CancellationToken))
+        {
+            IList<Employee> list = new List<Employee>();
+            var old = await _context.Employee.FindAsync(id);
+            var employees = _context.Employee.Where(e => e.ReportsTo == id);
+
+            foreach (var e in employees)
+            {
+                var employee = new Employee
+                {
+                    EmployeeId = e.EmployeeId,
+                    LastName = e.LastName,
+                    FirstName = e.FirstName,
+                    Title = e.Title,
+                    ReportsTo = e.ReportsTo,
+                    ReportsToName = old.LastName + ", " + old.FirstName,
+                    BirthDate = e.BirthDate,
+                    HireDate = e.HireDate,
+                    Address = e.Address,
+                    City = e.City,
+                    State = e.State,
+                    Country = e.Country,
+                    PostalCode = e.PostalCode,
+                    Phone = e.Phone,
+                    Fax = e.Fax,
+                    Email = e.Email
+                };
+                list.Add(employee);
+            }
+            return list.ToList();
         }
     }
 }

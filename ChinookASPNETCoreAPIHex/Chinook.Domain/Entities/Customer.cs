@@ -1,4 +1,6 @@
-﻿namespace Chinook.Domain.Entities
+﻿using System.Collections.Generic;
+
+namespace Chinook.Domain.Entities
 {
     public class Customer
     {
@@ -16,5 +18,8 @@
         public string Email { get; set; }
         public int? SupportRepId { get; set; }
         public string SupportRepName { get; set; }
+        
+        public ICollection<Invoice> Invoices { get; set; } = new HashSet<Invoice>();
+        public Employee SupportRep { get; set; }
     }
 }

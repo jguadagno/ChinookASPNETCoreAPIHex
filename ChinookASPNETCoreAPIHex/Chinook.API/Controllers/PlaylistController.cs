@@ -87,7 +87,7 @@ namespace Chinook.API.Controllers
                 {
                     return NotFound();
                 }
-                string errors = JsonConvert.SerializeObject(ModelState.Values
+                var errors = JsonConvert.SerializeObject(ModelState.Values
                 .SelectMany(state => state.Errors)
                 .Select(error => error.ErrorMessage));
                 Debug.WriteLine(errors);

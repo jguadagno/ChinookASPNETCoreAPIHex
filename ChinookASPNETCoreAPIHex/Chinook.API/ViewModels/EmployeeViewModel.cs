@@ -24,7 +24,7 @@ namespace Chinook.API.ViewModels
         public string Email { get; set; }
 
         public List<Customer> Customers { get; set; }
-        public Employee ReportsToNavigation { get; set; }
-        public ICollection<Employee> InverseReportsToNavigations { get; set; }
+        public Employee Manager { get; set; }
+        public ICollection<Employee> DirectReports { get; set; }
     }
 }
