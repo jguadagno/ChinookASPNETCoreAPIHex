@@ -52,6 +52,7 @@ namespace Chinook.Domain.Supervisor
             {
                 album.Artist = await GetArtistByIdAsync(album.ArtistId, ct);
                 album.Tracks = await GetTrackByAlbumIdAsync(album.AlbumId, ct);
+                album.ArtistName = album.Artist.Name;
 
             }
             return albums.ToList();
@@ -62,6 +63,7 @@ namespace Chinook.Domain.Supervisor
             var albumViewModel = AlbumCoverter.Convert(await _albumRepository.GetByIdAsync(id, ct));
             albumViewModel.Artist = await GetArtistByIdAsync(albumViewModel.ArtistId, ct);
             albumViewModel.Tracks = await GetTrackByAlbumIdAsync(albumViewModel.AlbumId, ct);
+            albumViewModel.ArtistName = albumViewModel.Artist.Name;
             return albumViewModel;
         }
 
@@ -155,6 +157,7 @@ namespace Chinook.Domain.Supervisor
             {
                 customer.Invoices = await GetInvoiceByCustomerIdAsync(customer.CustomerId, ct);
                 customer.SupportRep = await GetEmployeeByIdAsync(customer.SupportRepId.GetValueOrDefault(), ct);
+                customer.SupportRepName = $"{customer.SupportRep.LastName}, {customer.SupportRep.FirstName}";
             }
             return customers.ToList();
         }
@@ -164,6 +167,7 @@ namespace Chinook.Domain.Supervisor
             var customerViewModel = CustomerCoverter.Convert(await _customerRepository.GetByIdAsync(id, ct));
             customerViewModel.Invoices = await GetInvoiceByCustomerIdAsync(customerViewModel.CustomerId, ct);
             customerViewModel.SupportRep = await GetEmployeeByIdAsync(customerViewModel.SupportRepId.GetValueOrDefault(), ct);
+            customerViewModel.SupportRepName = $"{customerViewModel.SupportRep.LastName}, {customerViewModel.SupportRep.FirstName}";
             return customerViewModel;
         }
 
@@ -231,6 +235,7 @@ namespace Chinook.Domain.Supervisor
                 employee.Customers = await GetCustomerBySupportRepIdAsync(employee.EmployeeId, ct);
                 employee.DirectReports = await GetEmployeeDirectReportsAsync(employee.EmployeeId, ct);
                 employee.Manager = await GetEmployeeReportsToAsync(employee.ReportsTo.GetValueOrDefault(), ct);
+                employee.ReportsToName = $"{employee.Manager.LastName}, {employee.Manager.FirstName}";
             }
             return employees.ToList();
         }
@@ -242,6 +247,7 @@ namespace Chinook.Domain.Supervisor
             employeeViewModel.Customers = await GetCustomerBySupportRepIdAsync(employeeViewModel.EmployeeId, ct);
             employeeViewModel.DirectReports = await GetEmployeeDirectReportsAsync(employeeViewModel.EmployeeId, ct);
             employeeViewModel.Manager = await GetEmployeeReportsToAsync(employeeViewModel.ReportsTo.GetValueOrDefault(), ct);
+            employeeViewModel.ReportsToName = $"{employeeViewModel.Manager.LastName}, {employeeViewModel.Manager.FirstName}";
             return employeeViewModel;
         }
 
@@ -372,6 +378,7 @@ namespace Chinook.Domain.Supervisor
             {
                 invoiceLine.Track = await GetTrackByIdAsync(invoiceLine.TrackId, ct);
                 invoiceLine.Invoice = await GetInvoiceByIdAsync(invoiceLine.InvoiceId, ct);
+                invoiceLine.TrackName = invoiceLine.Track.Name;
             }
             return invoiceLines.ToList();
         }
@@ -381,6 +388,7 @@ namespace Chinook.Domain.Supervisor
             var invoiceLineViewModel = InvoiceLineCoverter.Convert(await _invoiceLineRepository.GetByIdAsync(id, ct));
             invoiceLineViewModel.Track = await GetTrackByIdAsync(invoiceLineViewModel.TrackId, ct);
             invoiceLineViewModel.Invoice = await GetInvoiceByIdAsync(invoiceLineViewModel.InvoiceId, ct);
+            invoiceLineViewModel.TrackName = invoiceLineViewModel.Track.Name;
             return invoiceLineViewModel;
         }
 
@@ -438,6 +446,7 @@ namespace Chinook.Domain.Supervisor
             {
                 invoice.Customer = await GetCustomerByIdAsync(invoice.CustomerId, ct);
                 invoice.InvoiceLines = await GetInvoiceLineByInvoiceIdAsync(invoice.InvoiceId, ct);
+                invoice.CustomerName = $"{invoice.Customer.LastName}, {invoice.Customer.FirstName}";
             }
             return invoices.ToList();
         }
@@ -447,6 +456,7 @@ namespace Chinook.Domain.Supervisor
             var invoiceViewModel = InvoiceCoverter.Convert(await _invoiceRepository.GetByIdAsync(id, ct));
             invoiceViewModel.Customer = await GetCustomerByIdAsync(invoiceViewModel.CustomerId, ct);
             invoiceViewModel.InvoiceLines = await GetInvoiceLineByInvoiceIdAsync(invoiceViewModel.InvoiceId, ct);
+            invoiceViewModel.CustomerName = $"{invoiceViewModel.Customer.LastName}, {invoiceViewModel.Customer.FirstName}";
             return invoiceViewModel;
         }
 
@@ -599,6 +609,9 @@ namespace Chinook.Domain.Supervisor
                 track.Genre = await GetGenreByIdAsync(track.GenreId.GetValueOrDefault(), ct);
                 track.Album = await GetAlbumByIdAsync(track.AlbumId, ct);
                 track.MediaType = await GetMediaTypeByIdAsync(track.MediaTypeId, ct);
+                track.AlbumName = track.Album.Title;
+                track.MediaTypeName = track.MediaType.Name;
+                track.GenreName = track.Genre.Name;
             }
             return tracks.ToList();
         }
@@ -609,6 +622,9 @@ namespace Chinook.Domain.Supervisor
             trackViewModel.Genre = await GetGenreByIdAsync(trackViewModel.GenreId.GetValueOrDefault(), ct);
             trackViewModel.Album = await GetAlbumByIdAsync(trackViewModel.AlbumId, ct);
             trackViewModel.MediaType = await GetMediaTypeByIdAsync(trackViewModel.MediaTypeId, ct);
+            trackViewModel.AlbumName = trackViewModel.Album.Title;
+            trackViewModel.MediaTypeName = trackViewModel.MediaType.Name;
+            trackViewModel.GenreName = trackViewModel.Genre.Name;
             return trackViewModel;
         }
 
