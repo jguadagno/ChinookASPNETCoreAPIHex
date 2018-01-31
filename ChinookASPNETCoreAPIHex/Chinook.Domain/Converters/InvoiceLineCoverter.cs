@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Chinook.Domain.Entities;
 using Chinook.Domain.ViewModels;
 
@@ -8,35 +9,29 @@ namespace Chinook.Domain.Converters
     {
         public static InvoiceLineViewModel Convert(InvoiceLine invoiceLine)
         {
-            var invoiceLineViewModel = new InvoiceLineViewModel()
-            {
-                InvoiceLineId = invoiceLine.InvoiceLineId,
-                InvoiceId = invoiceLine.InvoiceId,
-                TrackId = invoiceLine.TrackId,
-                UnitPrice = invoiceLine.UnitPrice,
-                Quantity = invoiceLine.Quantity
-            };
+            var invoiceLineViewModel = new InvoiceLineViewModel();
+            invoiceLineViewModel.InvoiceLineId = invoiceLine.InvoiceLineId;
+            invoiceLineViewModel.InvoiceId = invoiceLine.InvoiceId;
+            invoiceLineViewModel.TrackId = invoiceLine.TrackId;
+            invoiceLineViewModel.UnitPrice = invoiceLine.UnitPrice;
+            invoiceLineViewModel.Quantity = invoiceLine.Quantity;
 
             return invoiceLineViewModel;
         }
         
-        public static List<InvoiceLineViewModel> ConvertList(List<InvoiceLine> invoiceLines)
+        public static List<InvoiceLineViewModel> ConvertList(IEnumerable<InvoiceLine> invoiceLines)
         {
-            List<InvoiceLineViewModel> invoiceLineViewModels = new List<InvoiceLineViewModel>();
-            foreach(var i in invoiceLines)
-            {
-                var invoiceLineViewModel = new InvoiceLineViewModel
+            return invoiceLines.Select(i =>
                 {
-                    InvoiceLineId = i.InvoiceLineId,
-                    InvoiceId = i.InvoiceId,
-                    TrackId = i.TrackId,
-                    UnitPrice = i.UnitPrice,
-                    Quantity = i.Quantity
-                };
-                invoiceLineViewModels.Add(invoiceLineViewModel);
-            }
-
-            return invoiceLineViewModels;
+                    var model = new InvoiceLineViewModel();
+                    model.InvoiceLineId = i.InvoiceLineId;
+                    model.InvoiceId = i.InvoiceId;
+                    model.TrackId = i.TrackId;
+                    model.UnitPrice = i.UnitPrice;
+                    model.Quantity = i.Quantity;
+                    return model;
+                })
+                .ToList();
         }
     }
 }

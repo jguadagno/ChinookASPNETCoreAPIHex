@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Chinook.Domain.Entities;
 using Chinook.Domain.ViewModels;
 
@@ -8,28 +9,22 @@ namespace Chinook.Domain.Converters
     {
         public static MediaTypeViewModel Convert(MediaType mediaType)
         {
-            var mediaTypeViewModel = new MediaTypeViewModel()
-            {
-                MediaTypeId = mediaType.MediaTypeId,
-                Name = mediaType.Name
-            };
+            var mediaTypeViewModel = new MediaTypeViewModel();
+            mediaTypeViewModel.MediaTypeId = mediaType.MediaTypeId;
+            mediaTypeViewModel.Name = mediaType.Name;
             return mediaTypeViewModel;
         }
         
-        public static List<MediaTypeViewModel> ConvertList(List<MediaType> mediaTypes)
+        public static List<MediaTypeViewModel> ConvertList(IEnumerable<MediaType> mediaTypes)
         {
-            List<MediaTypeViewModel> mediaTypeViewModels = new List<MediaTypeViewModel>();
-            foreach(var m in mediaTypes)
-            {
-                var mediaTypeViewModel = new MediaTypeViewModel
+            return mediaTypes.Select(m =>
                 {
-                    MediaTypeId = m.MediaTypeId,
-                    Name = m.Name
-                };
-                mediaTypeViewModels.Add(mediaTypeViewModel);
-            }
-
-            return mediaTypeViewModels;
+                    var model = new MediaTypeViewModel();
+                    model.MediaTypeId = m.MediaTypeId;
+                    model.Name = m.Name;
+                    return model;
+                })
+                .ToList();
         }
     }
 }

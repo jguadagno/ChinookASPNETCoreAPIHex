@@ -3,13 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Chinook.Domain.Repositories;
 using System.Threading;
 using Newtonsoft.Json;
 using System.Diagnostics;
-using Chinook.API.Supervisor;
+using Chinook.Domain.Supervisor;
 using Chinook.Domain.ViewModels;
-using StackExchange.Redis;
 
 namespace Chinook.API.Controllers
 {

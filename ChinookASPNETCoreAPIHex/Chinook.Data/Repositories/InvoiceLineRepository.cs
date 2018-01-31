@@ -30,7 +30,7 @@ namespace Chinook.Data.Repositories
         public async Task<List<InvoiceLine>> GetAllAsync(CancellationToken ct = default(CancellationToken))
         {
             IList<InvoiceLine> list = new List<InvoiceLine>();
-            var invoiceLines = await _context.InvoiceLine.ToListAsync(cancellationToken: ct);
+            var invoiceLines = await _context.InvoiceLine.ToListAsync(ct);
             foreach (var i in invoiceLines)
             {
                 var invoiceLine = new InvoiceLine
@@ -107,7 +107,7 @@ namespace Chinook.Data.Repositories
         public async Task<List<InvoiceLine>> GetByInvoiceIdAsync(int id, CancellationToken ct = default(CancellationToken))
         {
             IList<InvoiceLine> list = new List<InvoiceLine>();
-            var current = await _context.InvoiceLine.Where(a => a.InvoiceId == id).ToListAsync(cancellationToken: ct);
+            var current = await _context.InvoiceLine.Where(a => a.InvoiceId == id).ToListAsync(ct);
             foreach (var i in current)
             {
                 var newisd = new InvoiceLine
@@ -126,7 +126,7 @@ namespace Chinook.Data.Repositories
         public async Task<List<InvoiceLine>> GetByTrackIdAsync(int id, CancellationToken ct = default(CancellationToken))
         {
             IList<InvoiceLine> list = new List<InvoiceLine>();
-            var current = await _context.InvoiceLine.Where(a => a.TrackId == id).ToListAsync(cancellationToken: ct);
+            var current = await _context.InvoiceLine.Where(a => a.TrackId == id).ToListAsync(ct);
             foreach (var i in current)
             {
                 var newisd = new InvoiceLine

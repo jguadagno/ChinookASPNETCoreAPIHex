@@ -1,6 +1,4 @@
-﻿using Chinook.Domain.Entities;
-
-namespace Chinook.Domain.ViewModels
+﻿namespace Chinook.Domain.ViewModels
 {
     public class PlaylistTrackViewModel
     {

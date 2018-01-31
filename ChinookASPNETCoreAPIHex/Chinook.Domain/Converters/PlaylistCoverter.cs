@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Chinook.Domain.Entities;
 using Chinook.Domain.ViewModels;
 
@@ -8,28 +9,22 @@ namespace Chinook.Domain.Converters
     {
         public static PlaylistViewModel Convert(Playlist playlist)
         {
-            var playlistViewModel = new PlaylistViewModel()
-            {
-                PlaylistId = playlist.PlaylistId,
-                Name = playlist.Name
-            };
+            var playlistViewModel = new PlaylistViewModel();
+            playlistViewModel.PlaylistId = playlist.PlaylistId;
+            playlistViewModel.Name = playlist.Name;
             return playlistViewModel;
         }
         
-        public static List<PlaylistViewModel> ConvertList(List<Playlist> playlists)
+        public static List<PlaylistViewModel> ConvertList(IEnumerable<Playlist> playlists)
         {
-            List<PlaylistViewModel> playlistViewModels = new List<PlaylistViewModel>();
-            foreach(var p in playlists)
-            {
-                var playlistViewModel = new PlaylistViewModel
+            return playlists.Select(p =>
                 {
-                    PlaylistId = p.PlaylistId,
-                    Name = p.Name
-                };
-                playlistViewModels.Add(playlistViewModel);
-            }
-
-            return playlistViewModels;
+                    var model = new PlaylistViewModel();
+                    model.PlaylistId = p.PlaylistId;
+                    model.Name = p.Name;
+                    return model;
+                })
+                .ToList();
         }
     }
 }

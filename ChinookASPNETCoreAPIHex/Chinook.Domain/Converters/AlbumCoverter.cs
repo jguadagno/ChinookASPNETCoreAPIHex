@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Chinook.Domain.Entities;
 using Chinook.Domain.ViewModels;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Chinook.Domain.Converters
 {
@@ -9,31 +9,25 @@ namespace Chinook.Domain.Converters
     {
         public static AlbumViewModel Convert(Album album)
         {
-            var albumViewModel = new AlbumViewModel
-            {
-                AlbumId = album.AlbumId,
-                ArtistId = album.ArtistId,
-                Title = album.Title
-            };
+            var albumViewModel = new AlbumViewModel();
+            albumViewModel.AlbumId = album.AlbumId;
+            albumViewModel.ArtistId = album.ArtistId;
+            albumViewModel.Title = album.Title;
 
             return albumViewModel;
         }
         
-        public static List<AlbumViewModel> ConvertList(List<Album> albums)
+        public static List<AlbumViewModel> ConvertList(IEnumerable<Album> albums)
         {
-            List<AlbumViewModel> albumViewModels = new List<AlbumViewModel>();
-            foreach(var a in albums)
-            {
-                var albumViewModel = new AlbumViewModel
+            return albums.Select(a =>
                 {
-                    AlbumId = a.AlbumId,
-                    ArtistId = a.ArtistId,
-                    Title = a.Title
-                };
-                albumViewModels.Add(albumViewModel);
-            }
-
-            return albumViewModels;
+                    var model = new AlbumViewModel();
+                    model.AlbumId = a.AlbumId;
+                    model.ArtistId = a.ArtistId;
+                    model.Title = a.Title;
+                    return model;
+                })
+                .ToList();
         }
     }
 }

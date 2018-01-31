@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Chinook.Domain.ViewModels;
 
-namespace Chinook.API.Supervisor
+namespace Chinook.Domain.Supervisor
 {
     public interface IChinookSupervisor
     {
@@ -67,6 +67,7 @@ namespace Chinook.API.Supervisor
         Task<List<TrackViewModel>> GetTrackByAlbumIdAsync(int id, CancellationToken ct = default(CancellationToken));
         Task<List<TrackViewModel>> GetTrackByGenreIdAsync(int id, CancellationToken ct = default(CancellationToken));
         Task<List<TrackViewModel>> GetTrackByMediaTypeIdAsync(int id, CancellationToken ct = default(CancellationToken));
+        Task<List<TrackViewModel>> GetTrackByPlaylistIdIdAsync(int id, CancellationToken ct = default(CancellationToken));
         Task<TrackViewModel> AddTrackAsync(TrackViewModel newTrackViewModel, CancellationToken ct = default(CancellationToken));
         Task<bool> UpdateTrackAsync(TrackViewModel trackViewModel, CancellationToken ct = default(CancellationToken));
         Task<bool> DeleteTrackAsync(int id, CancellationToken ct = default(CancellationToken));

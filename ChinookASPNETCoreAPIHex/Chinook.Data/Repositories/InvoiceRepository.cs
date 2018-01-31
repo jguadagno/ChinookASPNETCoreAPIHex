@@ -1,14 +1,14 @@
-﻿namespace Chinook.Data.Repositories
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Chinook.Domain.Entities;
+using Chinook.Domain.Repositories;
+
+namespace Chinook.Data.Repositories
 {
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    using Chinook.Domain.Entities;
-    using Chinook.Domain.Repositories;
-
-    using Microsoft.EntityFrameworkCore;
+    
 
     /// <summary>
     /// The invoice repository.
@@ -38,7 +38,7 @@
         public async Task<List<Invoice>> GetAllAsync(CancellationToken ct = default(CancellationToken))
         {
             IList<Invoice> list = new List<Invoice>();
-            var invoices = await _context.Invoice.ToListAsync(cancellationToken: ct);
+            var invoices = await _context.Invoice.ToListAsync(ct);
             foreach (var i in invoices)
             {
                 var invoice = new Invoice
@@ -132,7 +132,7 @@
         public async Task<List<Invoice>> GetByCustomerIdAsync(int id, CancellationToken ct = default(CancellationToken))
         {
             IList<Invoice> list = new List<Invoice>();
-            var current = await _context.Invoice.Where(a => a.InvoiceId == id).ToListAsync(cancellationToken: ct);
+            var current = await _context.Invoice.Where(a => a.InvoiceId == id).ToListAsync(ct);
             foreach (var i in current)
             {
                 var newisd = new Invoice

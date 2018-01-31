@@ -30,7 +30,7 @@ namespace Chinook.Data.Repositories
         public async Task<List<Artist>> GetAllAsync(CancellationToken ct = default(CancellationToken))
         {
             IList<Artist> list = new List<Artist>();
-            var artists = await _context.Artist.ToListAsync(cancellationToken: ct);
+            var artists = await _context.Artist.ToListAsync(ct);
 
             foreach (var i in artists)
             {

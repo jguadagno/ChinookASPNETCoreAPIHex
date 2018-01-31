@@ -30,7 +30,7 @@ namespace Chinook.Data.Repositories
         public async Task<List<Track>> GetAllAsync(CancellationToken ct = default(CancellationToken))
         {
             IList<Track> list = new List<Track>();
-            var tracks = await _context.Track.ToListAsync(cancellationToken: ct);
+            var tracks = await _context.Track.ToListAsync(ct);
             foreach (var i in tracks)
             {
                 var track = new Track
@@ -122,7 +122,7 @@ namespace Chinook.Data.Repositories
         public async Task<List<Track>> GetByAlbumIdAsync(int id, CancellationToken ct = default(CancellationToken))
         {
             IList<Track> list = new List<Track>();
-            var current = await _context.Track.Where(a => a.AlbumId == id).ToListAsync(cancellationToken: ct);
+            var current = await _context.Track.Where(a => a.AlbumId == id).ToListAsync(ct);
             foreach (var i in current)
             {
                 var track = new Track
@@ -145,7 +145,7 @@ namespace Chinook.Data.Repositories
         public async Task<List<Track>> GetByGenreIdAsync(int id, CancellationToken ct = default(CancellationToken))
         {
             IList<Track> list = new List<Track>();
-            var current = await _context.Track.Where(a => a.GenreId == id).ToListAsync(cancellationToken: ct);
+            var current = await _context.Track.Where(a => a.GenreId == id).ToListAsync(ct);
             foreach (var i in current)
             {
                 var track = new Track
@@ -168,7 +168,7 @@ namespace Chinook.Data.Repositories
         public async Task<List<Track>> GetByMediaTypeIdAsync(int id, CancellationToken ct = default(CancellationToken))
         {
             IList<Track> list = new List<Track>();
-            var current = await _context.Track.Where(a => a.MediaTypeId == id).ToListAsync(cancellationToken: ct);
+            var current = await _context.Track.Where(a => a.MediaTypeId == id).ToListAsync(ct);
             foreach (var i in current)
             {
                 var track = new Track

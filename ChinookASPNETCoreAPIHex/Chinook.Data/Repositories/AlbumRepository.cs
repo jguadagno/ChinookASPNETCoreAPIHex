@@ -30,7 +30,7 @@ namespace Chinook.Data.Repositories
         public async Task<List<Album>> GetAllAsync(CancellationToken ct = default(CancellationToken))
         {
             IList<Album> list = new List<Album>();
-            var albums = await _context.Album.ToListAsync(cancellationToken: ct);
+            var albums = await _context.Album.ToListAsync(ct);
 
             foreach (var i in albums)
             {
@@ -101,7 +101,7 @@ namespace Chinook.Data.Repositories
         public async Task<List<Album>> GetByArtistIdAsync(int id, CancellationToken ct = default(CancellationToken))
         {
             IList<Album> list = new List<Album>();
-            var current = await _context.Album.Where(a => a.ArtistId == id).ToListAsync(cancellationToken: ct);
+            var current = await _context.Album.Where(a => a.ArtistId == id).ToListAsync(ct);
             foreach (var i in current)
             {
                 var newisd = new Album

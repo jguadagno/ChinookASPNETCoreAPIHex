@@ -30,7 +30,7 @@ namespace Chinook.Data.Repositories
         public async Task<List<PlaylistTrack>> GetAllAsync(CancellationToken ct = default(CancellationToken))
         {
             IList<PlaylistTrack> list = new List<PlaylistTrack>();
-            var playlistTracks = await _context.PlaylistTrack.ToListAsync(cancellationToken: ct);
+            var playlistTracks = await _context.PlaylistTrack.ToListAsync(ct);
             foreach (var i in playlistTracks)
             {
                 var playlistTrack = new PlaylistTrack
@@ -46,7 +46,7 @@ namespace Chinook.Data.Repositories
         public async Task<List<PlaylistTrack>> GetByPlaylistIdAsync(int id, CancellationToken ct = default(CancellationToken))
         {
             IList<PlaylistTrack> list = new List<PlaylistTrack>();
-            var current = await _context.PlaylistTrack.Where(a => a.PlaylistId == id).ToListAsync(cancellationToken: ct);
+            var current = await _context.PlaylistTrack.Where(a => a.PlaylistId == id).ToListAsync(ct);
             foreach (var i in current)
             {
                 var newisd = new PlaylistTrack
@@ -62,7 +62,7 @@ namespace Chinook.Data.Repositories
         public async Task<List<PlaylistTrack>> GetByTrackIdAsync(int id, CancellationToken ct = default(CancellationToken))
         {
             IList<PlaylistTrack> list = new List<PlaylistTrack>();
-            var current = await _context.PlaylistTrack.Where(a => a.TrackId == id).ToListAsync(cancellationToken: ct);
+            var current = await _context.PlaylistTrack.Where(a => a.TrackId == id).ToListAsync(ct);
             foreach (var i in current)
             {
                 var newisd = new PlaylistTrack

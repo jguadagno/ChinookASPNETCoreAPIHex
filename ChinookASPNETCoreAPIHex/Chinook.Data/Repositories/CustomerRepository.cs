@@ -30,7 +30,7 @@ namespace Chinook.Data.Repositories
         public async Task<List<Customer>> GetAllAsync(CancellationToken ct = default(CancellationToken))
         {
             IList<Customer> list = new List<Customer>();
-            var customers = await _context.Customer.ToListAsync(cancellationToken: ct);
+            var customers = await _context.Customer.ToListAsync(ct);
             foreach (var i in customers)
             {
                 var customer = new Customer
@@ -137,7 +137,7 @@ namespace Chinook.Data.Repositories
         public async Task<List<Customer>> GetBySupportRepIdAsync(int id, CancellationToken ct = default(CancellationToken))
         {
             IList<Customer> list = new List<Customer>();
-            var current = await _context.Customer.Where(a => a.SupportRepId == id).ToListAsync(cancellationToken: ct);
+            var current = await _context.Customer.Where(a => a.SupportRepId == id).ToListAsync(ct);
             foreach (var i in current)
             {
                 var customer = new Customer

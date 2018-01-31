@@ -30,7 +30,7 @@ namespace Chinook.Data.Repositories
         public async Task<List<MediaType>> GetAllAsync(CancellationToken ct = default(CancellationToken))
         {
             IList<MediaType> list = new List<MediaType>();
-            var mediaTypes = await _context.MediaType.ToListAsync(cancellationToken: ct);
+            var mediaTypes = await _context.MediaType.ToListAsync(ct);
             foreach (var i in mediaTypes)
             {
                 var mediaType = new MediaType

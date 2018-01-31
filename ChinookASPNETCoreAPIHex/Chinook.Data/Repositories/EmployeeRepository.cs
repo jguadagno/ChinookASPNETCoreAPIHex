@@ -30,7 +30,7 @@ namespace Chinook.Data.Repositories
         public async Task<List<Employee>> GetAllAsync(CancellationToken ct = default(CancellationToken))
         {
             IList<Employee> list = new List<Employee>();
-            var employees = await _context.Employee.ToListAsync(cancellationToken: ct);
+            var employees = await _context.Employee.ToListAsync(ct);
             foreach (var i in employees)
             {
                 var employee = new Employee

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Chinook.Domain.Entities;
 
 namespace Chinook.Domain.ViewModels
 {
