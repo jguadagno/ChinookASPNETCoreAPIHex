@@ -28,13 +28,18 @@ namespace Chinook.Data.Repositories
 
         public async Task<List<Playlist>> GetAllAsync(CancellationToken ct = default(CancellationToken))
         {
-            var old = await _context.Playlist.ToListAsync(cancellationToken: ct);
-            IList<Playlist> list = old.Select(i => new Playlist
+            IList<Playlist> list = new List<Playlist>();
+            var playlists = await _context.Playlist.ToListAsync(ct);
+           
+            foreach (var i in playlists)
+            {
+                var playlist = new Playlist
                 {
                     PlaylistId = i.PlaylistId,
                     Name = i.Name
-                })
-                .ToList();
+                };
+                list.Add(playlist);
+            }
             return list.ToList();
         }
 
@@ -47,6 +52,30 @@ namespace Chinook.Data.Repositories
                 Name = old.Name
             };
             return playlist;
+        }
+
+        public async Task<List<Track>> GetTrackByPlaylistIdAsync(int id, CancellationToken ct = default(CancellationToken))
+        {
+            IList<Track> list = new List<Track>();
+            var playlistTracks = _context.PlaylistTrack.Where(p => p.PlaylistId == id);
+            foreach (var playlistTrack in playlistTracks)
+            {
+                var track = await _context.Track.FindAsync(playlistTrack.TrackId);
+                var trackEntity = new Track
+                {
+                    TrackId = track.TrackId,
+                    Name = track.Name,
+                    AlbumId = track.AlbumId,
+                    MediaTypeId = track.MediaTypeId,
+                    GenreId = track.GenreId,
+                    Composer = track.Composer,
+                    Milliseconds = track.Milliseconds,
+                    Bytes = track.Bytes,
+                    UnitPrice = track.UnitPrice
+                };
+                list.Add(trackEntity);
+            }
+            return list.ToList();
         }
 
         public async Task<Playlist> AddAsync(Playlist newPlaylist, CancellationToken ct = default(CancellationToken))

@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using Chinook.Data.DataModels;
 
-namespace Chinook.API.ViewModels
+namespace Chinook.Domain.ViewModels
 {
     public class EmployeeViewModel
     {
@@ -23,8 +22,8 @@ namespace Chinook.API.ViewModels
         public string Fax { get; set; }
         public string Email { get; set; }
 
-        public List<Customer> Customers { get; set; }
-        public Employee Manager { get; set; }
-        public ICollection<Employee> DirectReports { get; set; }
+        public List<CustomerViewModel> Customers { get; set; }
+        public EmployeeViewModel Manager { get; set; }
+        public ICollection<EmployeeViewModel> DirectReports { get; set; }
     }
 }

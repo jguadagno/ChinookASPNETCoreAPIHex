@@ -30,19 +30,9 @@ namespace Chinook.Data.Repositories
         public async Task<List<Customer>> GetAllAsync(CancellationToken ct = default(CancellationToken))
         {
             IList<Customer> list = new List<Customer>();
-            var old = await _context.Customer.ToListAsync(cancellationToken: ct);
-            foreach (var i in old)
+            var customers = await _context.Customer.ToListAsync(ct);
+            foreach (var i in customers)
             {
-                string supportRepName;
-                if (i.SupportRepId != null)
-                {
-                    var supportRep = await _context.Employee.FindAsync(i.SupportRepId);
-                    supportRepName = supportRep.LastName + ", " + supportRep.FirstName;
-                }
-                else
-                {
-                    supportRepName = "";
-                }
                 var customer = new Customer
                 {
                     CustomerId = i.CustomerId,
@@ -57,8 +47,7 @@ namespace Chinook.Data.Repositories
                     Phone = i.Phone,
                     Fax = i.Fax,
                     Email = i.Email,
-                    SupportRepId = i.SupportRepId,
-                    SupportRepName = supportRepName
+                    SupportRepId = i.SupportRepId
                 };
                 list.Add(customer);
             }
@@ -67,17 +56,7 @@ namespace Chinook.Data.Repositories
 
         public async Task<Customer> GetByIdAsync(int id, CancellationToken ct = default(CancellationToken))
         {
-            string supportRepName;
             var old = await _context.Customer.FindAsync(id);
-            if (old.SupportRepId != null)
-            {
-                var supportRep = await _context.Employee.FindAsync(old.SupportRepId);
-                supportRepName = supportRep.LastName + ", " + supportRep.FirstName;
-            }
-            else
-            {
-                supportRepName = "";
-            }
             var customer = new Customer
             {
                 CustomerId = old.CustomerId,
@@ -92,8 +71,7 @@ namespace Chinook.Data.Repositories
                 Phone = old.Phone,
                 Fax = old.Fax,
                 Email = old.Email,
-                SupportRepId = old.SupportRepId,
-                SupportRepName = supportRepName
+                SupportRepId = old.SupportRepId
             };
             return customer;
         }
@@ -159,11 +137,9 @@ namespace Chinook.Data.Repositories
         public async Task<List<Customer>> GetBySupportRepIdAsync(int id, CancellationToken ct = default(CancellationToken))
         {
             IList<Customer> list = new List<Customer>();
-            var current = await _context.Customer.Where(a => a.SupportRepId == id).ToListAsync(cancellationToken: ct);
+            var current = await _context.Customer.Where(a => a.SupportRepId == id).ToListAsync(ct);
             foreach (var i in current)
             {
-                var employee = await _context.Employee.FindAsync(i.SupportRepId);
-
                 var customer = new Customer
                 {
                     CustomerId = i.CustomerId,
@@ -178,8 +154,7 @@ namespace Chinook.Data.Repositories
                     Phone = i.Phone,
                     Fax = i.Fax,
                     Email = i.Email,
-                    SupportRepId = i.SupportRepId,
-                    SupportRepName = employee.LastName + ", " + employee.FirstName
+                    SupportRepId = i.SupportRepId
                 };
                 list.Add(customer);
             }

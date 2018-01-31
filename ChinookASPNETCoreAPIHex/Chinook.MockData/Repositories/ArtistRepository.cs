@@ -18,7 +18,7 @@ namespace Chinook.MockData.Repositories
         {
             IList<Artist> list = new List<Artist>();
 
-            Artist artist = new Artist
+            var artist = new Artist
             {
                 ArtistId = 1,
                 Name = "Foo"

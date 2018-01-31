@@ -27,20 +27,18 @@ namespace Chinook.Data.Repositories
             _context.Dispose();
         }
 
-        public async Task<List<Album>> GetAllAsync(string sortOrder = "", string searchString = "", int page = 0, int pageSize = 0, CancellationToken ct = default(CancellationToken))
+        public async Task<List<Album>> GetAllAsync(CancellationToken ct = default(CancellationToken))
         {
             IList<Album> list = new List<Album>();
-            var old = await _context.Album.ToListAsync(cancellationToken: ct);
+            var albums = await _context.Album.ToListAsync(ct);
 
-            foreach (var i in old)
+            foreach (var i in albums)
             {
-                var artist = await _context.Artist.FindAsync(i.ArtistId);
-                Album album = new Album
+                var album = new Album
                 {
                     AlbumId = i.AlbumId,
                     ArtistId = i.ArtistId,
-                    Title = i.Title,
-                    ArtistName = artist.Name
+                    Title = i.Title
                 };
                 list.Add(album);
             }
@@ -49,14 +47,12 @@ namespace Chinook.Data.Repositories
 
         public async Task<Album> GetByIdAsync(int id, CancellationToken ct = default(CancellationToken))
         {
-            var old = await _context.Album.FindAsync(id);
-            var artist = await _context.Artist.FindAsync(old.ArtistId);
-            Album album = new Album
+            var albums = await _context.Album.FindAsync(id);
+            var album = new Album
             {
-                AlbumId = old.AlbumId,
-                ArtistId = old.ArtistId,
-                Title = old.Title,
-                ArtistName = artist.Name
+                AlbumId = albums.AlbumId,
+                ArtistId = albums.ArtistId,
+                Title = albums.Title
             };
             return album;
         }
@@ -105,16 +101,14 @@ namespace Chinook.Data.Repositories
         public async Task<List<Album>> GetByArtistIdAsync(int id, CancellationToken ct = default(CancellationToken))
         {
             IList<Album> list = new List<Album>();
-            var current = await _context.Album.Where(a => a.ArtistId == id).ToListAsync(cancellationToken: ct);
-            foreach (DataModels.Album i in current)
+            var current = await _context.Album.Where(a => a.ArtistId == id).ToListAsync(ct);
+            foreach (var i in current)
             {
-                var artist = await _context.Artist.FindAsync(i.ArtistId);
-                Album newisd = new Album
+                var newisd = new Album
                 {
                     Title = i.Title,
                     ArtistId = i.ArtistId,
-                    AlbumId = i.AlbumId,
-                    ArtistName = artist.Name
+                    AlbumId = i.AlbumId
                 };
                 list.Add(newisd);
             }

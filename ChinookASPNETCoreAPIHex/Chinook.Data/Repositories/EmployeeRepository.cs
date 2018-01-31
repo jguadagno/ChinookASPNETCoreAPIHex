@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using System.Threading;
 using System.Collections.Generic;
@@ -31,20 +30,9 @@ namespace Chinook.Data.Repositories
         public async Task<List<Employee>> GetAllAsync(CancellationToken ct = default(CancellationToken))
         {
             IList<Employee> list = new List<Employee>();
-            var old = await _context.Employee.ToListAsync(cancellationToken: ct);
-            foreach (var i in old)
+            var employees = await _context.Employee.ToListAsync(ct);
+            foreach (var i in employees)
             {
-                string reportsToName;
-                if (i.ReportsTo != null)
-                {
-                    var reportsTo = await _context.Employee.FindAsync(i.ReportsTo);
-                    reportsToName = reportsTo.LastName + ", " + reportsTo.FirstName;
-                }
-                else
-                {
-                    reportsToName = "";
-                }
-                
                 var employee = new Employee
                 {
                     EmployeeId = i.EmployeeId,
@@ -52,7 +40,6 @@ namespace Chinook.Data.Repositories
                     FirstName = i.FirstName,
                     Title = i.Title,
                     ReportsTo = i.ReportsTo,
-                    ReportsToName = reportsToName,
                     BirthDate = i.BirthDate,
                     HireDate = i.HireDate,
                     Address = i.Address,
@@ -71,17 +58,7 @@ namespace Chinook.Data.Repositories
 
         public async Task<Employee> GetByIdAsync(int id, CancellationToken ct = default(CancellationToken))
         {
-            string reportsToName;
             var old = await _context.Employee.FindAsync(id);
-            if (old.ReportsTo != null)
-            {
-                var reportsTo = await _context.Employee.FindAsync(old.ReportsTo);
-                reportsToName = reportsTo.LastName + ", " + reportsTo.FirstName;
-            }
-            else
-            {
-                reportsToName = "";
-            }
             var employee = new Employee
             {
                 EmployeeId = old.EmployeeId,
@@ -89,7 +66,6 @@ namespace Chinook.Data.Repositories
                 FirstName = old.FirstName,
                 Title = old.Title,
                 ReportsTo = old.ReportsTo,
-                ReportsToName = reportsToName,
                 BirthDate = old.BirthDate,
                 HireDate = old.HireDate,
                 Address = old.Address,
@@ -171,37 +147,34 @@ namespace Chinook.Data.Repositories
         public async Task<Employee> GetReportsToAsync(int id, CancellationToken ct = default(CancellationToken))
         {
             var old = await _context.Employee.FindAsync(id);
-            var reportsTo = await _context.Employee.FindAsync(old.Manager);
+            var reportsTo = await _context.Employee.FindAsync(old.ReportsTo);
             var employee = new Employee
             {
-                EmployeeId = old.EmployeeId,
-                LastName = old.LastName,
-                FirstName = old.FirstName,
-                Title = old.Title,
-                ReportsTo = old.ReportsTo,
-                ReportsToName = reportsTo.LastName + ", " + reportsTo.FirstName,
-                BirthDate = old.BirthDate,
-                HireDate = old.HireDate,
-                Address = old.Address,
-                City = old.City,
-                State = old.State,
-                Country = old.Country,
-                PostalCode = old.PostalCode,
-                Phone = old.Phone,
-                Fax = old.Fax,
-                Email = old.Email
+                EmployeeId = reportsTo.EmployeeId,
+                LastName = reportsTo.LastName,
+                FirstName = reportsTo.FirstName,
+                Title = reportsTo.Title,
+                BirthDate = reportsTo.BirthDate,
+                HireDate = reportsTo.HireDate,
+                Address = reportsTo.Address,
+                City = reportsTo.City,
+                State = reportsTo.State,
+                Country = reportsTo.Country,
+                PostalCode = reportsTo.PostalCode,
+                Phone = reportsTo.Phone,
+                Fax = reportsTo.Fax,
+                Email = reportsTo.Email
             };
             return employee;
         }
-
-        public async Task<List<Employee>> GetDirectReportsAsync(int id,
-            CancellationToken ct = default(CancellationToken))
+        
+        public async Task<List<Employee>> GetDirectReportsAsync(int id, CancellationToken ct = default(CancellationToken))
         {
             IList<Employee> list = new List<Employee>();
             var old = await _context.Employee.FindAsync(id);
-            var employees = _context.Employee.Where(e => e.ReportsTo == id);
+            var directReports = _context.Employee.Where(e => e.ReportsTo == id);
 
-            foreach (var e in employees)
+            foreach (var e in directReports)
             {
                 var employee = new Employee
                 {
@@ -209,8 +182,7 @@ namespace Chinook.Data.Repositories
                     LastName = e.LastName,
                     FirstName = e.FirstName,
                     Title = e.Title,
-                    ReportsTo = e.ReportsTo,
-                    ReportsToName = old.LastName + ", " + old.FirstName,
+                    ReportsTo = old.EmployeeId,
                     BirthDate = e.BirthDate,
                     HireDate = e.HireDate,
                     Address = e.Address,

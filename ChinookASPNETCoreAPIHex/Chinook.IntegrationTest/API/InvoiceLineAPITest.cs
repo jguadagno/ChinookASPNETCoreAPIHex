@@ -10,13 +10,12 @@ namespace Chinook.IntegrationTest.API
 {
     public class InvoiceLineApiTest
     {
-        private readonly TestServer _server;
         private readonly HttpClient _client;
 
         public InvoiceLineApiTest()
         {
-            _server = new TestServer(new WebHostBuilder().UseStartup<Startup>());
-            _client = _server.CreateClient();
+            var server = new TestServer(new WebHostBuilder().UseStartup<Startup>());
+            _client = server.CreateClient();
         }
 
         [Theory]

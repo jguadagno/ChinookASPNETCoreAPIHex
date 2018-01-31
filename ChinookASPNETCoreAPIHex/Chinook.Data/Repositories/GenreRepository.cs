@@ -29,13 +29,17 @@ namespace Chinook.Data.Repositories
 
         public async Task<List<Genre>> GetAllAsync(CancellationToken ct = default(CancellationToken))
         {
-            var old = await _context.Genre.ToListAsync(cancellationToken: ct);
-            IList<Genre> list = old.Select(i => new Genre
+            IList<Genre> list = new List<Genre>();
+            var genres = await _context.Genre.ToListAsync(ct);
+            foreach (var g in genres)
+            {
+                var genre = new Genre
                 {
-                    GenreId = i.GenreId,
-                    Name = i.Name
-                })
-                .ToList();
+                    GenreId = g.GenreId,
+                    Name = g.Name
+                };
+                list.Add(genre);
+            }
             return list.ToList();
         }
 

@@ -28,7 +28,7 @@ namespace Chinook.MockData.Repositories
         public async Task<List<PlaylistTrack>> GetByPlaylistIdAsync(int id, CancellationToken ct = default(CancellationToken))
         {
             IList<PlaylistTrack> list = new List<PlaylistTrack>();
-                PlaylistTrack newisd = new PlaylistTrack
+                var newisd = new PlaylistTrack
                 {
                     PlaylistId = 1,
                     TrackId = 1
@@ -40,7 +40,7 @@ namespace Chinook.MockData.Repositories
         public async Task<List<PlaylistTrack>> GetByTrackIdAsync(int id, CancellationToken ct = default(CancellationToken))
         {
             IList<PlaylistTrack> list = new List<PlaylistTrack>();
-                PlaylistTrack newisd = new PlaylistTrack
+                var newisd = new PlaylistTrack
                 {
                     PlaylistId = 1,
                     TrackId = 1

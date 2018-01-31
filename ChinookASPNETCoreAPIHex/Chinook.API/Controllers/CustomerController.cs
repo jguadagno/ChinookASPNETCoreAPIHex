@@ -3,25 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Chinook.API.ViewModels;
-using Chinook.Domain.Repositories;
-using AutoMapper;
 using System.Threading;
 using Newtonsoft.Json;
 using System.Diagnostics;
+using Chinook.Domain.Supervisor;
+using Chinook.Domain.ViewModels;
 
 namespace Chinook.API.Controllers
 {
     [Route("api/[controller]")]
     public class CustomerController : Controller
     {
-        private readonly ICustomerRepository _customerRepository;
-        private readonly IEmployeeRepository _employeeRepository;
+        private readonly IChinookSupervisor _chinookSupervisor;
 
-        public CustomerController(ICustomerRepository customerRepository, IEmployeeRepository employeeRepository)
+        public CustomerController(IChinookSupervisor chinookSupervisor)
         {
-            _customerRepository = customerRepository;
-            _employeeRepository = employeeRepository;
+            _chinookSupervisor = chinookSupervisor;
         }
 
         [HttpGet]
@@ -30,7 +27,7 @@ namespace Chinook.API.Controllers
         {
             try
             {
-                return new ObjectResult(await _customerRepository.GetAllAsync(ct));
+                return new ObjectResult(await _chinookSupervisor.GetAllCustomerAsync(ct));
             }
             catch (Exception ex)
             {
@@ -44,11 +41,11 @@ namespace Chinook.API.Controllers
         {
             try
             {
-                if (await _customerRepository.GetByIdAsync(id, ct) == null)
+                if (await _chinookSupervisor.GetCustomerByIdAsync(id, ct) == null)
                 {
                     return NotFound();
                 }
-                return Ok(await _customerRepository.GetByIdAsync(id, ct));
+                return Ok(await _chinookSupervisor.GetCustomerByIdAsync(id, ct));
             }
             catch (Exception ex)
             {
@@ -62,11 +59,11 @@ namespace Chinook.API.Controllers
         {
             try
             {
-                if (await _employeeRepository.GetByIdAsync(id, ct) == null)
+                if (await _chinookSupervisor.GetEmployeeByIdAsync(id, ct) == null)
                 {
                     return NotFound();
                 }
-                return Ok(await _customerRepository.GetBySupportRepIdAsync(id, ct));
+                return Ok(await _chinookSupervisor.GetCustomerBySupportRepIdAsync(id, ct));
             }
             catch (Exception ex)
             {
@@ -82,23 +79,7 @@ namespace Chinook.API.Controllers
             {
                 if (input == null)
                     return BadRequest();
-                var customer = new Domain.Entities.Customer
-                {
-                    FirstName = input.FirstName,
-                    LastName = input.LastName,
-                    Company = input.Company,
-                    Address = input.Address,
-                    City = input.City,
-                    State = input.State,
-                    Country = input.Country,
-                    PostalCode = input.PostalCode,
-                    Phone = input.Phone,
-                    Fax = input.Fax,
-                    Email = input.Email,
-                    SupportRepId = input.SupportRepId
-                };
-
-                return Ok(await _customerRepository.AddAsync(customer, ct));
+                return Ok(await _chinookSupervisor.AddCustomerAsync(input, ct));
             }
             catch (Exception ex)
             {
@@ -114,7 +95,7 @@ namespace Chinook.API.Controllers
             {
                 if (input == null)
                     return BadRequest();
-                if (await _customerRepository.GetByIdAsync(id, ct) == null)
+                if (await _chinookSupervisor.GetCustomerByIdAsync(id, ct) == null)
                 {
                     return NotFound();
                 }
@@ -123,23 +104,12 @@ namespace Chinook.API.Controllers
                 .Select(error => error.ErrorMessage));
                 Debug.WriteLine(errors);
 
-                var currentValues = await _customerRepository.GetByIdAsync(id, ct);
+                if (await _chinookSupervisor.UpdateCustomerAsync(input, ct))
+                {
+                    return Ok(input);
+                }
 
-                currentValues.CustomerId = input.CustomerId;
-                currentValues.FirstName = input.FirstName;
-                currentValues.LastName = input.LastName;
-                currentValues.Company = input.Company;
-                currentValues.Address = input.Address;
-                currentValues.City = input.City;
-                currentValues.State = input.State;
-                currentValues.Country = input.Country;
-                currentValues.PostalCode = input.PostalCode;
-                currentValues.Phone = input.Phone;
-                currentValues.Fax = input.Fax;
-                currentValues.Email = input.Email;
-                currentValues.SupportRepId = input.SupportRepId;
-
-                return Ok(await _customerRepository.UpdateAsync(currentValues, ct));
+                return StatusCode(500);
             }
             catch (Exception ex)
             {
@@ -152,11 +122,17 @@ namespace Chinook.API.Controllers
         {
             try
             {
-                if (await _customerRepository.GetByIdAsync(id, ct) == null)
+                if (await _chinookSupervisor.GetCustomerByIdAsync(id, ct) == null)
                 {
                     return NotFound();
                 }
-                return Ok(await _customerRepository.DeleteAsync(id, ct));
+
+                if (await _chinookSupervisor.DeleteCustomerAsync(id, ct))
+                {
+                    return Ok();
+                }
+
+                return StatusCode(500);
             }
             catch (Exception ex)
             {

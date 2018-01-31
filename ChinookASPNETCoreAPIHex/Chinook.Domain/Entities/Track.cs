@@ -7,11 +7,8 @@ namespace Chinook.Domain.Entities
         public int TrackId { get; set; }
         public string Name { get; set; }
         public int AlbumId { get; set; }
-        public string AlbumName { get; set; }
         public int MediaTypeId { get; set; }
-        public string MediaTypeName { get; set; }
         public int? GenreId { get; set; }
-        public string GenreName { get; set; }
         public string Composer { get; set; }
         public int Milliseconds { get; set; }
         public int Bytes { get; set; }

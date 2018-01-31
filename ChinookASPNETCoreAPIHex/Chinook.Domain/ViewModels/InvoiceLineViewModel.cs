@@ -1,6 +1,4 @@
-﻿using Chinook.Data.DataModels;
-
-namespace Chinook.API.ViewModels
+﻿namespace Chinook.Domain.ViewModels
 {
     public class InvoiceLineViewModel
     {
@@ -11,7 +9,7 @@ namespace Chinook.API.ViewModels
         public decimal UnitPrice { get; set; }
         public int Quantity { get; set; }
 
-        public Invoice Invoice { get; set; }
-        public Track Track { get; set; }
+        public InvoiceViewModel Invoice { get; set; }
+        public TrackViewModel Track { get; set; }
     }
 }

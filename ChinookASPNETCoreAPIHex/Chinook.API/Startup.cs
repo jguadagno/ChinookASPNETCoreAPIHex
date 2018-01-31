@@ -33,6 +33,7 @@ namespace Chinook.API
 
             services.AddAutoMapper()
                 .ConfigureRepositories()
+                .ConfigureSupervisor()
                 .AddMiddleware()
                 .AddCorsConfiguration()
                 .AddConnectionProvider(Configuration)

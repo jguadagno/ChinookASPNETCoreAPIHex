@@ -10,7 +10,6 @@ namespace Chinook.Domain.Entities
         public string FirstName { get; set; }
         public string Title { get; set; }
         public int? ReportsTo { get; set; }
-        public string ReportsToName { get; set; }
         public DateTime? BirthDate { get; set; }
         public DateTime? HireDate { get; set; }
         public string Address { get; set; }
@@ -24,6 +23,6 @@ namespace Chinook.Domain.Entities
         
         public ICollection<Customer> Customers { get; set; } = new HashSet<Customer>();
         public Employee Manager { get; set; }
-        public ICollection<Employee> DirectReports { get; set; }
+        public ICollection<Employee> DirectReports { get; set; } = new HashSet<Employee>();
     }
 }

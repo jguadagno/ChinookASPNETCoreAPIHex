@@ -6,7 +6,6 @@ namespace Chinook.Domain.Entities
     {
         public int GenreId { get; set; }
         public string Name { get; set; }
-        
         public ICollection<Track> Tracks { get; set; } = new HashSet<Track>();
     }
 }

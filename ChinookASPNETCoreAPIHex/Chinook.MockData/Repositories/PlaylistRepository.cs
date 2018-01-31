@@ -40,6 +40,25 @@ namespace Chinook.MockData.Repositories
             return newPlaylist;
         }
 
+        public async Task<List<Track>> GetTrackByPlaylistIdAsync(int id, CancellationToken ct = default(CancellationToken))
+        {
+            IList<Track> list = new List<Track>();
+            var track = new Track
+            {
+                TrackId = 1,
+                Name = "foo",
+                AlbumId = 1,
+                MediaTypeId = 1,
+                GenreId = 1,
+                Composer = "foo",
+                Milliseconds = 1,
+                Bytes = 1,
+                UnitPrice = 1
+            };
+            list.Add(track);
+            return list.ToList();
+        }
+
         public async Task<bool> UpdateAsync(Playlist playlist, CancellationToken ct = default(CancellationToken))
         {
             return true;

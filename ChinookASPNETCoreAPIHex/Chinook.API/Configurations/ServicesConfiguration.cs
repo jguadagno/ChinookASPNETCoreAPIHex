@@ -1,5 +1,6 @@
 ﻿using Chinook.Data.Repositories;
 using Chinook.Domain.Repositories;
+using Chinook.Domain.Supervisor;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 
@@ -23,6 +24,13 @@ namespace Chinook.API.Configurations
             return services;
         }
 
+        public static IServiceCollection ConfigureSupervisor(this IServiceCollection services)
+        {
+            services.AddScoped<IChinookSupervisor, ChinookSupervisor>();
+
+            return services;
+        }
+        
         public static IServiceCollection AddMiddleware(this IServiceCollection services)
         {
             services.AddMvc().AddJsonOptions(options =>

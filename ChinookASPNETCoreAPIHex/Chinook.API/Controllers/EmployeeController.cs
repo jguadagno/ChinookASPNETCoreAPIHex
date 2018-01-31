@@ -3,23 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Chinook.API.ViewModels;
-using Chinook.Domain.Repositories;
-using AutoMapper;
 using System.Threading;
 using Newtonsoft.Json;
 using System.Diagnostics;
+using Chinook.Domain.Supervisor;
+using Chinook.Domain.ViewModels;
 
 namespace Chinook.API.Controllers
 {
     [Route("api/[controller]")]
     public class EmployeeController : Controller
     {
-        private readonly IEmployeeRepository _employeeRepository;
+        private readonly IChinookSupervisor _chinookSupervisor;
 
-        public EmployeeController(IEmployeeRepository employeeRepository)
+        public EmployeeController(IChinookSupervisor chinookSupervisor)
         {
-            _employeeRepository = employeeRepository;
+            _chinookSupervisor = chinookSupervisor;
         }
 
         [HttpGet]
@@ -28,7 +27,7 @@ namespace Chinook.API.Controllers
         {
             try
             {
-                return new ObjectResult(await _employeeRepository.GetAllAsync(ct));
+                return new ObjectResult(await _chinookSupervisor.GetAllEmployeeAsync(ct));
             }
             catch (Exception ex)
             {
@@ -42,11 +41,11 @@ namespace Chinook.API.Controllers
         {
             try
             {
-                if (await _employeeRepository.GetByIdAsync(id, ct) == null)
+                if (await _chinookSupervisor.GetEmployeeByIdAsync(id, ct) == null)
                 {
                     return NotFound();
                 }
-                return Ok(await _employeeRepository.GetByIdAsync(id, ct));
+                return Ok(await _chinookSupervisor.GetEmployeeByIdAsync(id, ct));
             }
             catch (Exception ex)
             {
@@ -60,11 +59,28 @@ namespace Chinook.API.Controllers
         {
             try
             {
-                if (await _employeeRepository.GetByIdAsync(id, ct) == null)
+                if (await _chinookSupervisor.GetEmployeeByIdAsync(id, ct) == null)
                 {
                     return NotFound();
                 }
-                return Ok(await _employeeRepository.GetReportsToAsync(id, ct));
+                return Ok(await _chinookSupervisor.GetEmployeeReportsToAsync(id, ct));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex);
+            }
+        }
+
+        [HttpGet("directreports/{id}")]
+        public async Task<IActionResult> GetDirectReports(int id, CancellationToken ct = default(CancellationToken))
+        {
+            try
+            {
+                if (await _chinookSupervisor.GetEmployeeByIdAsync(id, ct) == null)
+                {
+                    return NotFound();
+                }
+                return Ok(await _chinookSupervisor.GetDirectReportsAsync(id, ct));
             }
             catch (Exception ex)
             {
@@ -80,25 +96,7 @@ namespace Chinook.API.Controllers
             {
                 if (input == null)
                     return BadRequest();
-                var employee = new Domain.Entities.Employee
-                {
-                    LastName = input.LastName,
-                    FirstName = input.FirstName,
-                    Title = input.Title,
-                    ReportsTo = input.ReportsTo,
-                    BirthDate = input.BirthDate,
-                    HireDate = input.HireDate,
-                    Address = input.Address,
-                    City = input.City,
-                    State = input.State,
-                    Country = input.Country,
-                    PostalCode = input.PostalCode,
-                    Phone = input.Phone,
-                    Fax = input.Fax,
-                    Email = input.Email
-                };
-
-                return Ok(await _employeeRepository.AddAsync(employee, ct));
+                return Ok(await _chinookSupervisor.AddEmployeeAsync(input, ct));
             }
             catch (Exception ex)
             {
@@ -114,7 +112,7 @@ namespace Chinook.API.Controllers
             {
                 if (input == null)
                     return BadRequest();
-                if (await _employeeRepository.GetByIdAsync(id, ct) == null)
+                if (await _chinookSupervisor.GetEmployeeByIdAsync(id, ct) == null)
                 {
                     return NotFound();
                 }
@@ -123,25 +121,12 @@ namespace Chinook.API.Controllers
                 .Select(error => error.ErrorMessage));
                 Debug.WriteLine(errors);
 
-                var currentValues = await _employeeRepository.GetByIdAsync(id, ct);
+                if (await _chinookSupervisor.UpdateEmployeeAsync(input, ct))
+                {
+                    return Ok(input);
+                }
 
-                currentValues.EmployeeId = input.EmployeeId;
-                currentValues.LastName = input.LastName;
-                currentValues.FirstName = input.FirstName;
-                currentValues.Title = input.Title;
-                currentValues.ReportsTo = input.ReportsTo;
-                currentValues.BirthDate = input.BirthDate;
-                currentValues.HireDate = input.HireDate;
-                currentValues.Address = input.Address;
-                currentValues.City = input.City;
-                currentValues.State = input.State;
-                currentValues.Country = input.Country;
-                currentValues.PostalCode = input.PostalCode;
-                currentValues.Phone = input.Phone;
-                currentValues.Fax = input.Fax;
-                currentValues.Email = input.Email;
-
-                return Ok(await _employeeRepository.UpdateAsync(currentValues, ct));
+                return StatusCode(500);
             }
             catch (Exception ex)
             {
@@ -154,11 +139,17 @@ namespace Chinook.API.Controllers
         {
             try
             {
-                if (await _employeeRepository.GetByIdAsync(id, ct) == null)
+                if (await _chinookSupervisor.GetEmployeeByIdAsync(id, ct) == null)
                 {
                     return NotFound();
                 }
-                return Ok(await _employeeRepository.DeleteAsync(id, ct));
+
+                if (await _chinookSupervisor.DeleteEmployeeAsync(id, ct))
+                {
+                    return Ok();
+                }
+
+                return StatusCode(500);
             }
             catch (Exception ex)
             {

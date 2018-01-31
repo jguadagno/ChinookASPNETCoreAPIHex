@@ -1,7 +1,7 @@
 ﻿using System;
 using AutoMapper;
-using Chinook.API.ViewModels;
 using Chinook.Domain.Entities;
+using Chinook.Domain.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Chinook.API.Mapping

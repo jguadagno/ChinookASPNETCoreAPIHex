@@ -3,23 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Chinook.API.ViewModels;
-using Chinook.Domain.Repositories;
-using AutoMapper;
 using System.Threading;
 using Newtonsoft.Json;
 using System.Diagnostics;
+using Chinook.Domain.Supervisor;
+using Chinook.Domain.ViewModels;
 
 namespace Chinook.API.Controllers
 {
     [Route("api/[controller]")]
     public class ArtistController : Controller
     {
-        private readonly IArtistRepository _artistRepository;
+        private readonly IChinookSupervisor _chinookSupervisor;
 
-        public ArtistController(IArtistRepository artistRepository)
+        public ArtistController(IChinookSupervisor chinookSupervisor)
         {
-            _artistRepository = artistRepository;
+            _chinookSupervisor = chinookSupervisor;
         }
 
         [HttpGet]
@@ -28,7 +27,7 @@ namespace Chinook.API.Controllers
         {
             try
             {
-                return new ObjectResult(await _artistRepository.GetAllAsync(ct));
+                return new ObjectResult(await _chinookSupervisor.GetAllArtistAsync(ct));
             }
             catch (Exception ex)
             {
@@ -42,11 +41,11 @@ namespace Chinook.API.Controllers
         {
             try
             {
-                if (await _artistRepository.GetByIdAsync(id, ct) == null)
+                if (await _chinookSupervisor.GetArtistByIdAsync(id, ct) == null)
                 {
                     return NotFound();
                 }
-                return Ok(await _artistRepository.GetByIdAsync(id, ct));
+                return Ok(await _chinookSupervisor.GetArtistByIdAsync(id, ct));
             }
             catch (Exception ex)
             {
@@ -62,14 +61,8 @@ namespace Chinook.API.Controllers
             {
                 if (input == null)
                     return BadRequest();
-                var artist = new Domain.Entities.Artist
-                {
-                    Name = input.Name,
-                    ArtistId = input.ArtistId
-
-                };
-
-                return Ok(await _artistRepository.AddAsync(artist, ct));
+                
+                return Ok(await _chinookSupervisor.AddArtistAsync(input, ct));
             }
             catch (Exception ex)
             {
@@ -85,7 +78,7 @@ namespace Chinook.API.Controllers
             {
                 if (input == null)
                     return BadRequest();
-                if (await _artistRepository.GetByIdAsync(id, ct) == null)
+                if (await _chinookSupervisor.GetArtistByIdAsync(id, ct) == null)
                 {
                     return NotFound();
                 }
@@ -94,12 +87,12 @@ namespace Chinook.API.Controllers
                 .Select(error => error.ErrorMessage));
                 Debug.WriteLine(errors);
 
-                var currentValues = await _artistRepository.GetByIdAsync(id, ct);
+                if (await _chinookSupervisor.UpdateArtistAsync(input, ct))
+                {
+                    return Ok(input);
+                }
 
-                currentValues.ArtistId = input.ArtistId;
-                currentValues.Name = input.Name;
-
-                return Ok(await _artistRepository.UpdateAsync(currentValues, ct));
+                return StatusCode(500);
             }
             catch (Exception ex)
             {
@@ -112,11 +105,17 @@ namespace Chinook.API.Controllers
         {
             try
             {
-                if (await _artistRepository.GetByIdAsync(id, ct) == null)
+                if (await _chinookSupervisor.GetAlbumByIdAsync(id, ct) == null)
                 {
                     return NotFound();
                 }
-                return Ok(await _artistRepository.DeleteAsync(id, ct));
+
+                if (await _chinookSupervisor.DeleteAlbumAsync(id, ct))
+                {
+                    return Ok();
+                }
+
+                return StatusCode(500);
             }
             catch (Exception ex)
             {

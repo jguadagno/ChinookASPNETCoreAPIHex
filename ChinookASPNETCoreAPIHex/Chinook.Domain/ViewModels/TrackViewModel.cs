@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using Chinook.Data.DataModels;
 
-namespace Chinook.API.ViewModels
+namespace Chinook.Domain.ViewModels
 {
     public sealed class TrackViewModel
     {
@@ -18,10 +17,10 @@ namespace Chinook.API.ViewModels
         public int Bytes { get; set; }
         public decimal UnitPrice { get; set; }
 
-        public IList<InvoiceLine> InvoiceLines { get; set; }
-        public IList<PlaylistTrack> PlaylistTracks { get; set; }
-        public Album Album { get; set; }
-        public Genre Genre { get; set; }
-        public MediaType MediaType { get; set; }
+        public IList<InvoiceLineViewModel> InvoiceLines { get; set; }
+        public IList<PlaylistTrackViewModel> PlaylistTracks { get; set; }
+        public AlbumViewModel Album { get; set; }
+        public GenreViewModel Genre { get; set; }
+        public MediaTypeViewModel MediaType { get; set; }
     }
 }

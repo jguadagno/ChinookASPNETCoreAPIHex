@@ -30,11 +30,9 @@ namespace Chinook.Data.Repositories
         public async Task<List<PlaylistTrack>> GetAllAsync(CancellationToken ct = default(CancellationToken))
         {
             IList<PlaylistTrack> list = new List<PlaylistTrack>();
-            var old = await _context.PlaylistTrack.ToListAsync(cancellationToken: ct);
-            foreach (var i in old)
+            var playlistTracks = await _context.PlaylistTrack.ToListAsync(ct);
+            foreach (var i in playlistTracks)
             {
-                var playlist = await _context.Playlist.FindAsync(i.PlaylistId);
-                var track = await _context.Track.FindAsync(i.TrackId);
                 var playlistTrack = new PlaylistTrack
                 {
                     PlaylistId = i.PlaylistId,
@@ -48,12 +46,10 @@ namespace Chinook.Data.Repositories
         public async Task<List<PlaylistTrack>> GetByPlaylistIdAsync(int id, CancellationToken ct = default(CancellationToken))
         {
             IList<PlaylistTrack> list = new List<PlaylistTrack>();
-            var current = await _context.PlaylistTrack.Where(a => a.PlaylistId == id).ToListAsync(cancellationToken: ct);
-            foreach (DataModels.PlaylistTrack i in current)
+            var current = await _context.PlaylistTrack.Where(a => a.PlaylistId == id).ToListAsync(ct);
+            foreach (var i in current)
             {
-                var playlist = await _context.Playlist.FindAsync(i.PlaylistId);
-                var track = await _context.Track.FindAsync(i.TrackId);
-                PlaylistTrack newisd = new PlaylistTrack
+                var newisd = new PlaylistTrack
                 {
                     PlaylistId = i.PlaylistId,
                     TrackId = i.TrackId
@@ -66,12 +62,10 @@ namespace Chinook.Data.Repositories
         public async Task<List<PlaylistTrack>> GetByTrackIdAsync(int id, CancellationToken ct = default(CancellationToken))
         {
             IList<PlaylistTrack> list = new List<PlaylistTrack>();
-            var current = await _context.PlaylistTrack.Where(a => a.TrackId == id).ToListAsync(cancellationToken: ct);
-            foreach (DataModels.PlaylistTrack i in current)
+            var current = await _context.PlaylistTrack.Where(a => a.TrackId == id).ToListAsync(ct);
+            foreach (var i in current)
             {
-                var playlist = await _context.Playlist.FindAsync(i.PlaylistId);
-                var track = await _context.Track.FindAsync(i.TrackId);
-                PlaylistTrack newisd = new PlaylistTrack
+                var newisd = new PlaylistTrack
                 {
                     PlaylistId = i.PlaylistId,
                     TrackId = i.TrackId

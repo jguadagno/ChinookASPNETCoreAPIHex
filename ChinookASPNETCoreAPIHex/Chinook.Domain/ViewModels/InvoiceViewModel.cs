@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using Chinook.Data.DataModels;
 
-namespace Chinook.API.ViewModels
+namespace Chinook.Domain.ViewModels
 {
     public sealed class InvoiceViewModel
     {
@@ -17,7 +16,7 @@ namespace Chinook.API.ViewModels
         public string BillingPostalCode { get; set; }
         public decimal Total { get; set; }
 
-        public IList<InvoiceLine> InvoiceLines { get; set; }
-        public Customer Customer { get; set; }
+        public IList<InvoiceLineViewModel> InvoiceLines { get; set; }
+        public CustomerViewModel Customer { get; set; }
     }
 }

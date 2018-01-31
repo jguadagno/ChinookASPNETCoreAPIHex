@@ -30,31 +30,16 @@ namespace Chinook.Data.Repositories
         public async Task<List<Track>> GetAllAsync(CancellationToken ct = default(CancellationToken))
         {
             IList<Track> list = new List<Track>();
-            var old = await _context.Track.ToListAsync(cancellationToken: ct);
-            foreach (var i in old)
+            var tracks = await _context.Track.ToListAsync(ct);
+            foreach (var i in tracks)
             {
-                var album = await _context.Album.FindAsync(i.AlbumId);
-                var mediaType = await _context.MediaType.FindAsync(i.MediaTypeId);
-                string genreName;
-                if (i.GenreId != null)
-                {
-                    var genre = await _context.Genre.FindAsync(i.GenreId);
-                    genreName = genre.Name;
-                }
-                else
-                {
-                    genreName = "";
-                }
                 var track = new Track
                 {
                     TrackId = i.TrackId,
                     Name = i.Name,
                     AlbumId = i.AlbumId,
-                    AlbumName = album.Title,
                     MediaTypeId = i.MediaTypeId,
-                    MediaTypeName = mediaType.Name,
                     GenreId = i.GenreId,
-                    GenreName = genreName,
                     Composer = i.Composer,
                     Milliseconds = i.Milliseconds,
                     Bytes = i.Bytes,
@@ -67,29 +52,14 @@ namespace Chinook.Data.Repositories
 
         public async Task<Track> GetByIdAsync(int id, CancellationToken ct = default(CancellationToken))
         {
-            string genreName;
             var old = await _context.Track.FindAsync(id);
-            var album = await _context.Album.FindAsync(old.AlbumId);
-            var mediaType = await _context.MediaType.FindAsync(old.MediaTypeId);
-            if (old.GenreId != null)
-            {
-                var genre = await _context.Genre.FindAsync(old.GenreId);
-                genreName = genre.Name;
-            }
-            else
-            {
-                genreName = "";
-            }
             var track = new Track
             {
                 TrackId = old.TrackId,
                 Name = old.Name,
                 AlbumId = old.AlbumId,
-                AlbumName = album.Title,
                 MediaTypeId = old.MediaTypeId,
-                MediaTypeName = mediaType.Name,
                 GenreId = old.GenreId,
-                GenreName = genreName,
                 Composer = old.Composer,
                 Milliseconds = old.Milliseconds,
                 Bytes = old.Bytes,
@@ -152,28 +122,22 @@ namespace Chinook.Data.Repositories
         public async Task<List<Track>> GetByAlbumIdAsync(int id, CancellationToken ct = default(CancellationToken))
         {
             IList<Track> list = new List<Track>();
-            var current = await _context.Track.Where(a => a.AlbumId == id).ToListAsync(cancellationToken: ct);
-            foreach (DataModels.Track i in current)
+            var current = await _context.Track.Where(a => a.AlbumId == id).ToListAsync(ct);
+            foreach (var i in current)
             {
-                var album = await _context.Album.FindAsync(i.AlbumId);
-                var mediaType = await _context.MediaType.FindAsync(i.MediaTypeId);
-                var genre = await _context.Genre.FindAsync(i.GenreId);
-                Track newisd = new Track
+                var track = new Track
                 {
                     TrackId = i.TrackId,
                     Name = i.Name,
                     AlbumId = i.AlbumId,
-                    AlbumName = album.Title,
                     MediaTypeId = i.MediaTypeId,
-                    MediaTypeName = mediaType.Name,
                     GenreId = i.GenreId,
-                    GenreName = genre.Name,
                     Composer = i.Composer,
                     Milliseconds = i.Milliseconds,
                     Bytes = i.Bytes,
                     UnitPrice = i.UnitPrice
                 };
-                list.Add(newisd);
+                list.Add(track);
             }
             return list.ToList();
         }
@@ -181,28 +145,22 @@ namespace Chinook.Data.Repositories
         public async Task<List<Track>> GetByGenreIdAsync(int id, CancellationToken ct = default(CancellationToken))
         {
             IList<Track> list = new List<Track>();
-            var current = await _context.Track.Where(a => a.GenreId == id).ToListAsync(cancellationToken: ct);
+            var current = await _context.Track.Where(a => a.GenreId == id).ToListAsync(ct);
             foreach (var i in current)
             {
-                var album = await _context.Album.FindAsync(i.AlbumId);
-                var mediaType = await _context.MediaType.FindAsync(i.MediaTypeId);
-                var genre = await _context.Genre.FindAsync(i.GenreId);
-                var newisd = new Track
+                var track = new Track
                 {
                     TrackId = i.TrackId,
                     Name = i.Name,
                     AlbumId = i.AlbumId,
-                    AlbumName = album.Title,
                     MediaTypeId = i.MediaTypeId,
-                    MediaTypeName = mediaType.Name,
                     GenreId = i.GenreId,
-                    GenreName = genre.Name,
                     Composer = i.Composer,
                     Milliseconds = i.Milliseconds,
                     Bytes = i.Bytes,
                     UnitPrice = i.UnitPrice
                 };
-                list.Add(newisd);
+                list.Add(track);
             }
             return list.ToList();
         }
@@ -210,28 +168,22 @@ namespace Chinook.Data.Repositories
         public async Task<List<Track>> GetByMediaTypeIdAsync(int id, CancellationToken ct = default(CancellationToken))
         {
             IList<Track> list = new List<Track>();
-            var current = await _context.Track.Where(a => a.MediaTypeId == id).ToListAsync(cancellationToken: ct);
+            var current = await _context.Track.Where(a => a.MediaTypeId == id).ToListAsync(ct);
             foreach (var i in current)
             {
-                var album = await _context.Album.FindAsync(i.AlbumId);
-                var mediaType = await _context.MediaType.FindAsync(i.MediaTypeId);
-                var genre = await _context.Genre.FindAsync(i.GenreId);
-                var newisd = new Track
+                var track = new Track
                 {
                     TrackId = i.TrackId,
                     Name = i.Name,
                     AlbumId = i.AlbumId,
-                    AlbumName = album.Title,
                     MediaTypeId = i.MediaTypeId,
-                    MediaTypeName = mediaType.Name,
                     GenreId = i.GenreId,
-                    GenreName = genre.Name,
                     Composer = i.Composer,
                     Milliseconds = i.Milliseconds,
                     Bytes = i.Bytes,
                     UnitPrice = i.UnitPrice
                 };
-                list.Add(newisd);
+                list.Add(track);
             }
             return list.ToList();
         }
