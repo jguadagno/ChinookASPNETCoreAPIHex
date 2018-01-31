@@ -11,15 +11,10 @@ namespace Chinook.Data.Repositories
     public class PlaylistTrackRepository : IPlaylistTrackRepository
     {
         private readonly ChinookContext _context;
-        private readonly IPlaylistRepository _playlistRepo;
-        private readonly ITrackRepository _trackRepository;
 
-        public PlaylistTrackRepository(ChinookContext context, IPlaylistRepository playlistRepo,
-            ITrackRepository trackRepository)
+        public PlaylistTrackRepository(ChinookContext context)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
-            _playlistRepo = playlistRepo;
-            _trackRepository = trackRepository;
         }
 
         private async Task<bool> PlaylistTrackExists(int id, CancellationToken ct = default(CancellationToken))
@@ -38,14 +33,10 @@ namespace Chinook.Data.Repositories
             var playlistTracks = await _context.PlaylistTrack.ToListAsync(cancellationToken: ct);
             foreach (var i in playlistTracks)
             {
-                var playlist = await _playlistRepo.GetByIdAsync(i.PlaylistId, ct);
-                var track = await _trackRepository.GetByIdAsync(i.TrackId, ct);
                 var playlistTrack = new PlaylistTrack
                 {
                     PlaylistId = i.PlaylistId,
-                    TrackId = i.TrackId,
-                    Playlist = playlist,
-                    Track = track
+                    TrackId = i.TrackId
                 };
                 list.Add(playlistTrack);
             }
@@ -58,14 +49,10 @@ namespace Chinook.Data.Repositories
             var current = await _context.PlaylistTrack.Where(a => a.PlaylistId == id).ToListAsync(cancellationToken: ct);
             foreach (var i in current)
             {
-                var playlist = await _playlistRepo.GetByIdAsync(i.PlaylistId, ct);
-                var track = await _trackRepository.GetByIdAsync(i.TrackId, ct);
                 var newisd = new PlaylistTrack
                 {
                     PlaylistId = i.PlaylistId,
-                    TrackId = i.TrackId,
-                    Playlist = playlist,
-                    Track = track
+                    TrackId = i.TrackId
                 };
                 list.Add(newisd);
             }
@@ -78,14 +65,10 @@ namespace Chinook.Data.Repositories
             var current = await _context.PlaylistTrack.Where(a => a.TrackId == id).ToListAsync(cancellationToken: ct);
             foreach (var i in current)
             {
-                var playlist = await _playlistRepo.GetByIdAsync(i.PlaylistId, ct);
-                var track = await _trackRepository.GetByIdAsync(i.TrackId, ct);
                 var newisd = new PlaylistTrack
                 {
                     PlaylistId = i.PlaylistId,
-                    TrackId = i.TrackId,
-                    Playlist = playlist,
-                    Track = track
+                    TrackId = i.TrackId
                 };
                 list.Add(newisd);
             }

@@ -3,23 +3,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Chinook.API.ViewModels;
 using Chinook.Domain.Repositories;
-using AutoMapper;
 using System.Threading;
 using Newtonsoft.Json;
 using System.Diagnostics;
+using Chinook.API.Supervisor;
+using Chinook.Domain.ViewModels;
 
 namespace Chinook.API.Controllers
 {
     [Route("api/[controller]")]
     public class MediaTypeController : Controller
     {
-        private readonly IMediaTypeRepository _mediaTypeRepository;
+        private readonly IChinookSupervisor _chinookSupervisor;
 
-        public MediaTypeController(IMediaTypeRepository mediaTypeRepository)
+        public MediaTypeController(IChinookSupervisor chinookSupervisor)
         {
-            _mediaTypeRepository = mediaTypeRepository;
+            _chinookSupervisor = chinookSupervisor;
         }
 
         [HttpGet]
@@ -28,7 +28,7 @@ namespace Chinook.API.Controllers
         {
             try
             {
-                return new ObjectResult(await _mediaTypeRepository.GetAllAsync(ct));
+                return new ObjectResult(await _chinookSupervisor.GetAllMediaTypeAsync(ct));
             }
             catch (Exception ex)
             {
@@ -42,11 +42,11 @@ namespace Chinook.API.Controllers
         {
             try
             {
-                if (await _mediaTypeRepository.GetByIdAsync(id, ct) == null)
+                if (await _chinookSupervisor.GetMediaTypeByIdAsync(id, ct) == null)
                 {
                     return NotFound();
                 }
-                return Ok(await _mediaTypeRepository.GetByIdAsync(id, ct));
+                return Ok(await _chinookSupervisor.GetMediaTypeByIdAsync(id, ct));
             }
             catch (Exception ex)
             {
@@ -62,13 +62,7 @@ namespace Chinook.API.Controllers
             {
                 if (input == null)
                     return BadRequest();
-                var mediaType = new Domain.Entities.MediaType
-                {
-                    Name = input.Name
-
-                };
-
-                return Ok(await _mediaTypeRepository.AddAsync(mediaType, ct));
+                return Ok(await _chinookSupervisor.AddMediaTypeAsync(input, ct));
             }
             catch (Exception ex)
             {
@@ -84,7 +78,7 @@ namespace Chinook.API.Controllers
             {
                 if (input == null)
                     return BadRequest();
-                if (await _mediaTypeRepository.GetByIdAsync(id, ct) == null)
+                if (await _chinookSupervisor.GetMediaTypeByIdAsync(id, ct) == null)
                 {
                     return NotFound();
                 }
@@ -93,12 +87,12 @@ namespace Chinook.API.Controllers
                 .Select(error => error.ErrorMessage));
                 Debug.WriteLine(errors);
 
-                var currentValues = await _mediaTypeRepository.GetByIdAsync(id, ct);
+                if (await _chinookSupervisor.UpdateMediaTypeAsync(input, ct))
+                {
+                    return Ok(input);
+                }
 
-                currentValues.MediaTypeId = input.MediaTypeId;
-                currentValues.Name = input.Name;
-
-                return Ok(await _mediaTypeRepository.UpdateAsync(currentValues, ct));
+                return StatusCode(500);
             }
             catch (Exception ex)
             {
@@ -111,11 +105,17 @@ namespace Chinook.API.Controllers
         {
             try
             {
-                if (await _mediaTypeRepository.GetByIdAsync(id, ct) == null)
+                if (await _chinookSupervisor.GetMediaTypeByIdAsync(id, ct) == null)
                 {
                     return NotFound();
                 }
-                return Ok(await _mediaTypeRepository.DeleteAsync(id, ct));
+
+                if (await _chinookSupervisor.DeleteMediaTypeAsync(id, ct))
+                {
+                    return Ok();
+                }
+
+                return StatusCode(500);
             }
             catch (Exception ex)
             {

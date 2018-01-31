@@ -11,15 +11,10 @@ namespace Chinook.Data.Repositories
     public class CustomerRepository : ICustomerRepository
     {
         private readonly ChinookContext _context;
-        private readonly IEmployeeRepository _employeeRepo;
-        private readonly IInvoiceRepository _invoiceRepo;
 
-        public CustomerRepository(ChinookContext context, IEmployeeRepository employeeRepo,
-            IInvoiceRepository invoiceRepo)
+        public CustomerRepository(ChinookContext context)
         {
             _context = context;
-            _employeeRepo = employeeRepo;
-            _invoiceRepo = invoiceRepo;
         }
 
         private async Task<bool> CustomerExists(int id, CancellationToken ct = default(CancellationToken))
@@ -38,38 +33,6 @@ namespace Chinook.Data.Repositories
             var customers = await _context.Customer.ToListAsync(cancellationToken: ct);
             foreach (var i in customers)
             {
-                Employee supportRep;
-                string supportRepName;
-                if (i.SupportRepId != null)
-                {
-                    var rep = await _context.Employee.FindAsync(i.SupportRepId);
-                    supportRep = new Employee
-                    {
-                        EmployeeId = rep.EmployeeId,
-                        LastName = rep.LastName,
-                        FirstName = rep.FirstName,
-                        Title = rep.Title,
-                        ReportsTo = rep.ReportsTo,
-                        BirthDate = rep.BirthDate,
-                        HireDate = rep.HireDate,
-                        Address = rep.Address,
-                        City = rep.City,
-                        State = rep.State,
-                        Country = rep.Country,
-                        PostalCode = rep.PostalCode,
-                        Phone = rep.Phone,
-                        Fax = rep.Fax,
-                        Email = rep.Email
-                    };
-                    supportRepName = supportRep.LastName + ", " + supportRep.FirstName;
-                }
-                else
-                {
-                    supportRep = null;
-                    supportRepName = "";
-                }
-
-                var invoices = await _invoiceRepo.GetByCustomerIdAsync(i.CustomerId, ct);
                 var customer = new Customer
                 {
                     CustomerId = i.CustomerId,
@@ -84,10 +47,7 @@ namespace Chinook.Data.Repositories
                     Phone = i.Phone,
                     Fax = i.Fax,
                     Email = i.Email,
-                    SupportRepId = i.SupportRepId,
-                    SupportRepName = supportRepName,
-                    SupportRep = supportRep,
-                    Invoices = invoices
+                    SupportRepId = i.SupportRepId
                 };
                 list.Add(customer);
             }
@@ -97,37 +57,6 @@ namespace Chinook.Data.Repositories
         public async Task<Customer> GetByIdAsync(int id, CancellationToken ct = default(CancellationToken))
         {
             var old = await _context.Customer.FindAsync(id);
-            Employee supportRep;
-            string supportRepName;
-            if (old.SupportRepId != null)
-            {
-                var rep = await _context.Employee.FindAsync(old.SupportRepId);
-                supportRep = new Employee
-                {
-                    EmployeeId = rep.EmployeeId,
-                    LastName = rep.LastName,
-                    FirstName = rep.FirstName,
-                    Title = rep.Title,
-                    ReportsTo = rep.ReportsTo,
-                    BirthDate = rep.BirthDate,
-                    HireDate = rep.HireDate,
-                    Address = rep.Address,
-                    City = rep.City,
-                    State = rep.State,
-                    Country = rep.Country,
-                    PostalCode = rep.PostalCode,
-                    Phone = rep.Phone,
-                    Fax = rep.Fax,
-                    Email = rep.Email
-                };
-                supportRepName = supportRep.LastName + ", " + supportRep.FirstName;
-            }
-            else
-            {
-                supportRep = null;
-                supportRepName = "";
-            }
-            var invoices = await _invoiceRepo.GetByCustomerIdAsync(old.CustomerId, ct);
             var customer = new Customer
             {
                 CustomerId = old.CustomerId,
@@ -142,8 +71,7 @@ namespace Chinook.Data.Repositories
                 Phone = old.Phone,
                 Fax = old.Fax,
                 Email = old.Email,
-                SupportRepId = old.SupportRepId,
-                SupportRepName = supportRepName
+                SupportRepId = old.SupportRepId
             };
             return customer;
         }
@@ -212,8 +140,6 @@ namespace Chinook.Data.Repositories
             var current = await _context.Customer.Where(a => a.SupportRepId == id).ToListAsync(cancellationToken: ct);
             foreach (var i in current)
             {
-                var employee = await _context.Employee.FindAsync(i.SupportRepId);
-
                 var customer = new Customer
                 {
                     CustomerId = i.CustomerId,
@@ -228,8 +154,7 @@ namespace Chinook.Data.Repositories
                     Phone = i.Phone,
                     Fax = i.Fax,
                     Email = i.Email,
-                    SupportRepId = i.SupportRepId,
-                    SupportRepName = employee.LastName + ", " + employee.FirstName
+                    SupportRepId = i.SupportRepId
                 };
                 list.Add(customer);
             }

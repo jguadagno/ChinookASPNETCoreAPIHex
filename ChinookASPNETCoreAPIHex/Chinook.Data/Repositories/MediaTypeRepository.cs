@@ -11,12 +11,10 @@ namespace Chinook.Data.Repositories
     public class MediaTypeRepository : IMediaTypeRepository
     {
         private readonly ChinookContext _context;
-        private readonly ITrackRepository _trackRepo;
 
-        public MediaTypeRepository(ChinookContext context, ITrackRepository trackRepo)
+        public MediaTypeRepository(ChinookContext context)
         {
             _context = context;
-            _trackRepo = trackRepo;
         }
 
         private async Task<bool> MediaTypeExists(int id, CancellationToken ct = default(CancellationToken))
@@ -35,12 +33,10 @@ namespace Chinook.Data.Repositories
             var mediaTypes = await _context.MediaType.ToListAsync(cancellationToken: ct);
             foreach (var i in mediaTypes)
             {
-                var tracks = await _trackRepo.GetByMediaTypeIdAsync(i.MediaTypeId);
                 var mediaType = new MediaType
                 {
                     MediaTypeId = i.MediaTypeId,
-                    Name = i.Name,
-                    Tracks = tracks
+                    Name = i.Name
                 };
                 list.Add(mediaType);
             }
@@ -50,12 +46,10 @@ namespace Chinook.Data.Repositories
         public async Task<MediaType> GetByIdAsync(int id, CancellationToken ct = default(CancellationToken))
         {
             var old = await _context.MediaType.FindAsync(id);
-            var tracks = await _trackRepo.GetByMediaTypeIdAsync(old.MediaTypeId);
             var mediaType = new MediaType
             {
                 MediaTypeId = old.MediaTypeId,
-                Name = old.Name,
-                Tracks = tracks
+                Name = old.Name
             };
             return mediaType;
         }

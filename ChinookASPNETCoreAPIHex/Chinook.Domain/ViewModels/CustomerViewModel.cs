@@ -1,7 +1,7 @@
-﻿using Chinook.Data.DataModels;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Chinook.Domain.Entities;
 
-namespace Chinook.API.ViewModels
+namespace Chinook.Domain.ViewModels
 {
     public class CustomerViewModel
     {
@@ -20,7 +20,7 @@ namespace Chinook.API.ViewModels
         public int? SupportRepId { get; set; }
         public string SupportRepName { get; set; }
 
-        public IList<Invoice> Invoices { get; set; }
-        public Employee SupportRep { get; set; }
+        public IList<InvoiceViewModel> Invoices { get; set; }
+        public EmployeeViewModel SupportRep { get; set; }
     }
 }

@@ -11,12 +11,10 @@ namespace Chinook.Data.Repositories
     public class GenreRepository : IGenreRepository
     {
         private readonly ChinookContext _context;
-        private readonly ITrackRepository _trackRepo;
 
-        public GenreRepository(ChinookContext context, ITrackRepository trackRepo)
+        public GenreRepository(ChinookContext context)
         {
             _context = context;
-            _trackRepo = trackRepo;
         }
 
         private async Task<bool> GenreExists(int id, CancellationToken ct = default(CancellationToken))
@@ -35,7 +33,6 @@ namespace Chinook.Data.Repositories
             var genres = await _context.Genre.ToListAsync(cancellationToken: ct);
             foreach (var g in genres)
             {
-                var tracks = await _trackRepo.GetByGenreIdAsync(g.GenreId, ct);
                 var genre = new Genre
                 {
                     GenreId = g.GenreId,
@@ -49,7 +46,6 @@ namespace Chinook.Data.Repositories
         public async Task<Genre> GetByIdAsync(int id, CancellationToken ct = default(CancellationToken))
         {
             var old = await _context.Genre.FindAsync(id);
-            var tracks = await _trackRepo.GetByGenreIdAsync(old.GenreId, ct);
             var genre = new Genre
             {
                 GenreId = old.GenreId,

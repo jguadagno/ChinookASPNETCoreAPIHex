@@ -10,7 +10,6 @@ namespace Chinook.Domain.Entities
         public string FirstName { get; set; }
         public string Title { get; set; }
         public int? ReportsTo { get; set; }
-        public string ReportsToName { get; set; }
         public DateTime? BirthDate { get; set; }
         public DateTime? HireDate { get; set; }
         public string Address { get; set; }

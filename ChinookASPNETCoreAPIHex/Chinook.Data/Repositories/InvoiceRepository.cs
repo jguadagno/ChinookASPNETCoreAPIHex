@@ -20,15 +20,9 @@
         /// </summary>
         private readonly ChinookContext _context;
 
-        private readonly IInvoiceLineRepository _invoiceLineRepo;
-        private readonly ICustomerRepository _customerRepo;
-
-        public InvoiceRepository(ChinookContext context, IInvoiceLineRepository invoiceLineRepo,
-            ICustomerRepository customerRepo)
+        public InvoiceRepository(ChinookContext context)
         {
             _context = context;
-            _invoiceLineRepo = invoiceLineRepo;
-            _customerRepo = customerRepo;
         }
 
         private async Task<bool> InvoiceExists(int id, CancellationToken ct = default(CancellationToken))
@@ -47,22 +41,17 @@
             var invoices = await _context.Invoice.ToListAsync(cancellationToken: ct);
             foreach (var i in invoices)
             {
-                var customer = await _customerRepo.GetByIdAsync(i.CustomerId, ct);
-                var invoiceLines = await _invoiceLineRepo.GetByInvoiceIdAsync(i.InvoiceId, ct);
                 var invoice = new Invoice
                 {
                     InvoiceId = i.InvoiceId,
                     CustomerId = i.CustomerId,
-                    CustomerName = customer.LastName + ", " + customer.FirstName,
                     InvoiceDate = i.InvoiceDate,
                     BillingAddress = i.BillingAddress,
                     BillingCity = i.BillingCity,
                     BillingState = i.BillingState,
                     BillingCountry = i.BillingCountry,
                     BillingPostalCode = i.BillingPostalCode,
-                    Total = i.Total,
-                    InvoiceLines = invoiceLines,
-                    Customer = customer
+                    Total = i.Total
                 };
                 list.Add(invoice);
             }
@@ -73,22 +62,17 @@
         public async Task<Invoice> GetByIdAsync(int id, CancellationToken ct = default(CancellationToken))
         {
             var old = await _context.Invoice.FindAsync(id);
-            var customer = await _customerRepo.GetByIdAsync(old.CustomerId, ct);
-            var invoiceLines = await _invoiceLineRepo.GetByInvoiceIdAsync(old.InvoiceId, ct);
             var invoice = new Invoice
             {
                 InvoiceId = old.InvoiceId,
                 CustomerId = old.CustomerId,
-                CustomerName = customer.LastName + ", " + customer.FirstName,
                 InvoiceDate = old.InvoiceDate,
                 BillingAddress = old.BillingAddress,
                 BillingCity = old.BillingCity,
                 BillingState = old.BillingState,
                 BillingCountry = old.BillingCountry,
                 BillingPostalCode = old.BillingPostalCode,
-                Total = old.Total,
-                InvoiceLines = invoiceLines,
-                Customer = customer
+                Total = old.Total
             };
             return invoice;
         }
@@ -151,22 +135,17 @@
             var current = await _context.Invoice.Where(a => a.InvoiceId == id).ToListAsync(cancellationToken: ct);
             foreach (var i in current)
             {
-                var customer = await _customerRepo.GetByIdAsync(i.CustomerId, ct);
-                var invoiceLines = await _invoiceLineRepo.GetByInvoiceIdAsync(i.InvoiceId, ct);
                 var newisd = new Invoice
                 {
                     InvoiceId = i.InvoiceId,
                     CustomerId = i.CustomerId,
-                    CustomerName = customer.LastName + ", " + customer.FirstName,
                     InvoiceDate = i.InvoiceDate,
                     BillingAddress = i.BillingAddress,
                     BillingCity = i.BillingCity,
                     BillingState = i.BillingState,
                     BillingCountry = i.BillingCountry,
                     BillingPostalCode = i.BillingPostalCode,
-                    Total = i.Total,
-                    InvoiceLines = invoiceLines,
-                    Customer = customer
+                    Total = i.Total
                 };
                 list.Add(newisd);
             }

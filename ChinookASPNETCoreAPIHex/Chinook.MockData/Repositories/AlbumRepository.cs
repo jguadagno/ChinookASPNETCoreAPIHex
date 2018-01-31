@@ -13,7 +13,7 @@ namespace Chinook.MockData.Repositories
         {
         }
 
-        public async Task<List<Album>> GetAllAsync(string sortOrder = "", string searchString = "", int page = 0, int pageSize = 0, CancellationToken ct = default(CancellationToken))
+        public async Task<List<Album>> GetAllAsync(CancellationToken ct = default(CancellationToken))
         {
             IList<Album> list = new List<Album>();
 
@@ -21,8 +21,7 @@ namespace Chinook.MockData.Repositories
             {
                 AlbumId = 1,
                 ArtistId = 1,
-                Title = "Hellow World",
-                ArtistName = "Foo"
+                Title = "Hellow World"
             };
             list.Add(album);
 
@@ -35,8 +34,7 @@ namespace Chinook.MockData.Repositories
             {
                 AlbumId = id,
                 ArtistId = 1,
-                Title = "Hello World",
-                ArtistName = "Foo"
+                Title = "Hello World"
             };
             return album;
         }
@@ -64,8 +62,7 @@ namespace Chinook.MockData.Repositories
             {
                 Title = "hello World",
                 ArtistId = 1,
-                AlbumId = 1,
-                ArtistName = "Foo"
+                AlbumId = 1
             };
             list.Add(newisd);
             return list.ToList();

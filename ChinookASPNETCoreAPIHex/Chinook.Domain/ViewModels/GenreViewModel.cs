@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
-using Chinook.Data.DataModels;
+using Chinook.Domain.Entities;
 
-namespace Chinook.API.ViewModels
+namespace Chinook.Domain.ViewModels
 {
     public class GenreViewModel
     {
         public int GenreId { get; set; }
         public string Name { get; set; }
 
-        public IList<Track> Tracks { get; set; }
+        public IList<TrackViewModel> Tracks { get; set; }
     }
 }

@@ -11,15 +11,10 @@ namespace Chinook.Data.Repositories
     public class InvoiceLineRepository : IInvoiceLineRepository
     {
         private readonly ChinookContext _context;
-        private readonly IInvoiceRepository _invoiceRepo;
-        private readonly ITrackRepository _trackRepo;
 
-        public InvoiceLineRepository(ChinookContext context, IInvoiceRepository invoiceRepo,
-            ITrackRepository trackRepo)
+        public InvoiceLineRepository(ChinookContext context)
         {
             _context = context;
-            _invoiceRepo = invoiceRepo;
-            _trackRepo = trackRepo;
         }
 
         private async Task<bool> InvoiceLineExists(int id, CancellationToken ct = default(CancellationToken))
@@ -38,18 +33,13 @@ namespace Chinook.Data.Repositories
             var invoiceLines = await _context.InvoiceLine.ToListAsync(cancellationToken: ct);
             foreach (var i in invoiceLines)
             {
-                var track = await _trackRepo.GetByIdAsync(i.TrackId, ct);
-                var invoice = await _invoiceRepo.GetByIdAsync(i.InvoiceId, ct);
                 var invoiceLine = new InvoiceLine
                 {
                     InvoiceLineId = i.InvoiceLineId,
                     InvoiceId = i.InvoiceId,
                     TrackId = i.TrackId,
-                    TrackName = track.Name,
                     UnitPrice = i.UnitPrice,
-                    Quantity = i.Quantity,
-                    Track = track,
-                    Invoice = invoice
+                    Quantity = i.Quantity
                 };
                 list.Add(invoiceLine);
             }
@@ -59,18 +49,13 @@ namespace Chinook.Data.Repositories
         public async Task<InvoiceLine> GetByIdAsync(int id, CancellationToken ct = default(CancellationToken))
         {
             var old = await _context.InvoiceLine.FindAsync(id);
-            var track = await _trackRepo.GetByIdAsync(old.TrackId, ct);
-            var invoice = await _invoiceRepo.GetByIdAsync(old.InvoiceId, ct);
             var invoiceLine = new InvoiceLine
             {
                 InvoiceLineId = old.InvoiceLineId,
                 InvoiceId = old.InvoiceId,
                 TrackId = old.TrackId,
-                TrackName = track.Name,
                 UnitPrice = old.UnitPrice,
-                Quantity = old.Quantity,
-                Track = track,
-                Invoice = invoice
+                Quantity = old.Quantity
             };
             return invoiceLine;
         }
@@ -125,18 +110,13 @@ namespace Chinook.Data.Repositories
             var current = await _context.InvoiceLine.Where(a => a.InvoiceId == id).ToListAsync(cancellationToken: ct);
             foreach (var i in current)
             {
-                var track = await _trackRepo.GetByIdAsync(i.TrackId, ct);
-                var invoice = await _invoiceRepo.GetByIdAsync(i.InvoiceId, ct);
                 var newisd = new InvoiceLine
                 {
                     InvoiceLineId = i.InvoiceLineId,
                     InvoiceId = i.InvoiceId,
                     TrackId = i.TrackId,
-                    TrackName = track.Name,
                     UnitPrice = i.UnitPrice,
-                    Quantity = i.Quantity,
-                    Track = track,
-                    Invoice = invoice
+                    Quantity = i.Quantity
                 };
                 list.Add(newisd);
             }
@@ -149,18 +129,13 @@ namespace Chinook.Data.Repositories
             var current = await _context.InvoiceLine.Where(a => a.TrackId == id).ToListAsync(cancellationToken: ct);
             foreach (var i in current)
             {
-                var track = await _trackRepo.GetByIdAsync(i.TrackId, ct);
-                var invoice = await _invoiceRepo.GetByIdAsync(i.InvoiceId, ct);
                 var newisd = new InvoiceLine
                 {
                     InvoiceLineId = i.InvoiceLineId,
                     InvoiceId = i.InvoiceId,
                     TrackId = i.TrackId,
-                    TrackName = track.Name,
                     UnitPrice = i.UnitPrice,
-                    Quantity = i.Quantity,
-                    Track = track,
-                    Invoice = invoice
+                    Quantity = i.Quantity
                 };
                 list.Add(newisd);
             }

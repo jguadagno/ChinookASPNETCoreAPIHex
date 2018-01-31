@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using Chinook.Data.DataModels;
+using Chinook.Domain.Entities;
 
-namespace Chinook.API.ViewModels
+namespace Chinook.Domain.ViewModels
 {
     public class PlaylistViewModel
     {
@@ -9,8 +9,8 @@ namespace Chinook.API.ViewModels
         public string Name { get; set; }
         public IList<Track> Tracks { get; set; }
 
-        public IList<PlaylistTrack> PlaylistTracks { get; set; }
+        public IList<PlaylistTrackViewModel> PlaylistTracks { get; set; }
 
-        public ICollection<Track> Track { get; set; }
+        public ICollection<TrackViewModel> Track { get; set; }
     }
 }

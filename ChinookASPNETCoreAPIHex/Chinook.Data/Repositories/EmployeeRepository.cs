@@ -11,12 +11,10 @@ namespace Chinook.Data.Repositories
     public class EmployeeRepository : IEmployeeRepository
     {
         private readonly ChinookContext _context;
-        private readonly ICustomerRepository _customerRepo;
 
-        public EmployeeRepository(ChinookContext context, ICustomerRepository customerRepo)
+        public EmployeeRepository(ChinookContext context)
         {
             _context = context;
-            _customerRepo = customerRepo;
         }
 
         private async Task<bool> EmployeeExists(int id, CancellationToken ct = default(CancellationToken))
@@ -35,18 +33,6 @@ namespace Chinook.Data.Repositories
             var employees = await _context.Employee.ToListAsync(cancellationToken: ct);
             foreach (var i in employees)
             {
-                string reportsToName;
-                var reportsTo = await this.GetReportsToAsync(i.EmployeeId, ct);
-                if (reportsTo != null)
-                {
-                    reportsToName = reportsTo.LastName + ", " + reportsTo.FirstName;
-                }
-                else
-                {
-                    reportsToName = "";
-                }
-                var customers = await _customerRepo.GetBySupportRepIdAsync(i.EmployeeId, ct);
-                var directReports = await this.GetDirectReportsAsync(i.EmployeeId, ct);
                 var employee = new Employee
                 {
                     EmployeeId = i.EmployeeId,
@@ -54,7 +40,6 @@ namespace Chinook.Data.Repositories
                     FirstName = i.FirstName,
                     Title = i.Title,
                     ReportsTo = i.ReportsTo,
-                    ReportsToName = reportsToName,
                     BirthDate = i.BirthDate,
                     HireDate = i.HireDate,
                     Address = i.Address,
@@ -64,10 +49,7 @@ namespace Chinook.Data.Repositories
                     PostalCode = i.PostalCode,
                     Phone = i.Phone,
                     Fax = i.Fax,
-                    Email = i.Email,
-                    Manager = reportsTo,
-                    Customers = customers,
-                    DirectReports = directReports
+                    Email = i.Email
                 };
                 list.Add(employee);
             }
@@ -76,17 +58,7 @@ namespace Chinook.Data.Repositories
 
         public async Task<Employee> GetByIdAsync(int id, CancellationToken ct = default(CancellationToken))
         {
-            string reportsToName;
             var old = await _context.Employee.FindAsync(id);
-            if (old.ReportsTo != null)
-            {
-                var reportsTo = await _context.Employee.FindAsync(old.ReportsTo);
-                reportsToName = reportsTo.LastName + ", " + reportsTo.FirstName;
-            }
-            else
-            {
-                reportsToName = "";
-            }
             var employee = new Employee
             {
                 EmployeeId = old.EmployeeId,
@@ -94,7 +66,6 @@ namespace Chinook.Data.Repositories
                 FirstName = old.FirstName,
                 Title = old.Title,
                 ReportsTo = old.ReportsTo,
-                ReportsToName = reportsToName,
                 BirthDate = old.BirthDate,
                 HireDate = old.HireDate,
                 Address = old.Address,
@@ -212,7 +183,6 @@ namespace Chinook.Data.Repositories
                     FirstName = e.FirstName,
                     Title = e.Title,
                     ReportsTo = old.EmployeeId,
-                    ReportsToName = old.LastName + ", " + old.FirstName,
                     BirthDate = e.BirthDate,
                     HireDate = e.HireDate,
                     Address = e.Address,

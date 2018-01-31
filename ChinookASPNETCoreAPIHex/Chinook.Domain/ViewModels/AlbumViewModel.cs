@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using Chinook.Data.DataModels;
+using Chinook.Domain.Entities;
 
-namespace Chinook.API.ViewModels
+namespace Chinook.Domain.ViewModels
 {
     public class AlbumViewModel
     {
@@ -10,8 +10,8 @@ namespace Chinook.API.ViewModels
         public int ArtistId { get; set; }
         public string ArtistName { get; set; }
 
-        public Artist Artist { get; set; }
-        public IList<Track> Tracks { get; set; }
+        public ArtistViewModel Artist { get; set; }
+        public IList<TrackViewModel> Tracks { get; set; }
 
     }
 }

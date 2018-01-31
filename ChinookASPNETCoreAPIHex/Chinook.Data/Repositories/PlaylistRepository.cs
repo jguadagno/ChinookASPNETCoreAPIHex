@@ -10,12 +10,10 @@ namespace Chinook.Data.Repositories
     public class PlaylistRepository : IPlaylistRepository
     {
         private readonly ChinookContext _context;
-        private readonly IPlaylistTrackRepository _playlistTracksRepo;
 
-        public PlaylistRepository(ChinookContext context, IPlaylistTrackRepository playlistTracksRepo)
+        public PlaylistRepository(ChinookContext context)
         {
             _context = context;
-            _playlistTracksRepo = playlistTracksRepo;
         }
 
         private async Task<bool> PlaylistExists(int id, CancellationToken ct = default(CancellationToken))
@@ -35,12 +33,10 @@ namespace Chinook.Data.Repositories
            
             foreach (var i in playlists)
             {
-                var playlistTracks = await _playlistTracksRepo.GetByPlaylistIdAsync(i.PlaylistId, ct);
                 var playlist = new Playlist
                 {
                     PlaylistId = i.PlaylistId,
-                    Name = i.Name,
-                    PlaylistTracks = playlistTracks
+                    Name = i.Name
                 };
                 list.Add(playlist);
             }
@@ -50,12 +46,10 @@ namespace Chinook.Data.Repositories
         public async Task<Playlist> GetByIdAsync(int id, CancellationToken ct = default(CancellationToken))
         {
             var old = await _context.Playlist.FindAsync(id);
-            var playlistTracks = await _playlistTracksRepo.GetByPlaylistIdAsync(old.PlaylistId, ct);
             var playlist = new Playlist
             {
                 PlaylistId = old.PlaylistId,
-                Name = old.Name,
-                PlaylistTracks = playlistTracks
+                Name = old.Name
             };
             return playlist;
         }

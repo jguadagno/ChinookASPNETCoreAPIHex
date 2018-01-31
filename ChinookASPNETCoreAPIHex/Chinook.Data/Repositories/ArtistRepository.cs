@@ -11,12 +11,10 @@ namespace Chinook.Data.Repositories
     public class ArtistRepository : IArtistRepository
     {
         private readonly ChinookContext _context;
-        private readonly IAlbumRepository _albumrepo;
 
-        public ArtistRepository(ChinookContext context, IAlbumRepository albumrepo)
+        public ArtistRepository(ChinookContext context)
         {
             _context = context;
-            _albumrepo = albumrepo;
         }
 
         private async Task<bool> ArtistExists(int id, CancellationToken ct = default(CancellationToken))
@@ -36,12 +34,10 @@ namespace Chinook.Data.Repositories
 
             foreach (var i in artists)
             {
-                var albums = await _albumrepo.GetByArtistIdAsync(i.ArtistId);
                 var artist = new Artist
                 {
                     ArtistId = i.ArtistId,
-                    Name = i.Name,
-                    Albums = albums
+                    Name = i.Name
                 };
                 list.Add(artist);
             }

@@ -11,15 +11,10 @@ namespace Chinook.Data.Repositories
     public class AlbumRepository : IAlbumRepository
     {
         private readonly ChinookContext _context;
-        private readonly IArtistRepository _artistRepo;
-        private readonly ITrackRepository _trackRepo;
 
-        public AlbumRepository(ChinookContext context, IArtistRepository artistRepo,
-            ITrackRepository trackRepo)
+        public AlbumRepository(ChinookContext context)
         {
             _context = context;
-            _artistRepo = artistRepo;
-            _trackRepo = trackRepo;
         }
 
         private async Task<bool> AlbumExists(int id, CancellationToken ct = default(CancellationToken))
@@ -32,23 +27,18 @@ namespace Chinook.Data.Repositories
             _context.Dispose();
         }
 
-        public async Task<List<Album>> GetAllAsync(string sortOrder = "", string searchString = "", int page = 0, int pageSize = 0, CancellationToken ct = default(CancellationToken))
+        public async Task<List<Album>> GetAllAsync(CancellationToken ct = default(CancellationToken))
         {
             IList<Album> list = new List<Album>();
             var albums = await _context.Album.ToListAsync(cancellationToken: ct);
 
             foreach (var i in albums)
             {
-                var artist = await _artistRepo.GetByIdAsync(i.ArtistId, ct);
-                var tracks = await _trackRepo.GetByAlbumIdAsync(i.AlbumId, ct);
                 var album = new Album
                 {
                     AlbumId = i.AlbumId,
                     ArtistId = i.ArtistId,
-                    Title = i.Title,
-                    ArtistName = artist.Name,
-                    Artist = artist,
-                    Tracks = tracks
+                    Title = i.Title
                 };
                 list.Add(album);
             }
@@ -58,16 +48,11 @@ namespace Chinook.Data.Repositories
         public async Task<Album> GetByIdAsync(int id, CancellationToken ct = default(CancellationToken))
         {
             var albums = await _context.Album.FindAsync(id);
-            var artist = await _artistRepo.GetByIdAsync(albums.ArtistId, ct);
-            var tracks = await _trackRepo.GetByAlbumIdAsync(albums.AlbumId, ct);
             var album = new Album
             {
                 AlbumId = albums.AlbumId,
                 ArtistId = albums.ArtistId,
-                Title = albums.Title,
-                ArtistName = artist.Name,
-                Artist = artist,
-                Tracks = tracks
+                Title = albums.Title
             };
             return album;
         }
@@ -119,16 +104,11 @@ namespace Chinook.Data.Repositories
             var current = await _context.Album.Where(a => a.ArtistId == id).ToListAsync(cancellationToken: ct);
             foreach (var i in current)
             {
-                var artist = await _artistRepo.GetByIdAsync(i.ArtistId, ct);
-                var tracks = await _trackRepo.GetByAlbumIdAsync(i.AlbumId, ct);
                 var newisd = new Album
                 {
                     Title = i.Title,
                     ArtistId = i.ArtistId,
-                    AlbumId = i.AlbumId,
-                    ArtistName = artist.Name,
-                    Artist = artist,
-                    Tracks = tracks
+                    AlbumId = i.AlbumId
                 };
                 list.Add(newisd);
             }
