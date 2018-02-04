@@ -41,7 +41,7 @@ namespace Chinook.API
 
             services.AddSwaggerGen(s =>
             {
-                s.SwaggerDoc("v1", new Info {Title = "Chinook API", Description = "Chinook Music Demo API"});
+                s.SwaggerDoc("v1", new Info {Title = "Chinook API", Description = "Chinook Music Store API"});
             });
         }
 
