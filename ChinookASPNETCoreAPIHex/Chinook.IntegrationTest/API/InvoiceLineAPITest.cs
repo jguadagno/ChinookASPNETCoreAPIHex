@@ -20,7 +20,7 @@ namespace Chinook.IntegrationTest.API
 
         [Theory]
         [InlineData("GET")]
-        public async Task AlbumGetAllTestAsync(string method)
+        public async Task InvoiceLineGetAllTestAsync(string method)
         {
             // Arrange
             var request = new HttpRequestMessage(new HttpMethod(method), "/api/InvoiceLine/");
@@ -34,7 +34,7 @@ namespace Chinook.IntegrationTest.API
 
         [Theory]
         [InlineData("GET", 1)]
-        public async Task AlbumGetTestAsync(string method, int? id = null)
+        public async Task InvoiceLineGetTestAsync(string method, int? id = null)
         {
             // Arrange
             var request = new HttpRequestMessage(new HttpMethod(method), $"/api/InvoiceLine/{id}");

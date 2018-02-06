@@ -146,8 +146,7 @@ namespace Chinook.Data.Repositories
 
         public async Task<Employee> GetReportsToAsync(int id, CancellationToken ct = default(CancellationToken))
         {
-            var old = await _context.Employee.FindAsync(id);
-            var reportsTo = await _context.Employee.FindAsync(old.ReportsTo);
+            var reportsTo = await _context.Employee.FindAsync(id);
             var employee = new Employee
             {
                 EmployeeId = reportsTo.EmployeeId,

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -234,8 +235,8 @@ namespace Chinook.Domain.Supervisor
             {
                 employee.Customers = await GetCustomerBySupportRepIdAsync(employee.EmployeeId, ct);
                 employee.DirectReports = await GetEmployeeDirectReportsAsync(employee.EmployeeId, ct);
-                employee.Manager = await GetEmployeeReportsToAsync(employee.ReportsTo.GetValueOrDefault(), ct);
-                employee.ReportsToName = $"{employee.Manager.LastName}, {employee.Manager.FirstName}";
+                employee.Manager = (employee.ReportsTo.HasValue) ? await GetEmployeeReportsToAsync(employee.ReportsTo.GetValueOrDefault(), ct) : null;
+                employee.ReportsToName = (employee.ReportsTo.HasValue) ? $"{employee.Manager.LastName}, {employee.Manager.FirstName}" : String.Empty;
             }
             return employees.ToList();
         }
@@ -246,8 +247,8 @@ namespace Chinook.Domain.Supervisor
             var employeeViewModel = EmployeeCoverter.Convert(await _employeeRepository.GetByIdAsync(id, ct));
             employeeViewModel.Customers = await GetCustomerBySupportRepIdAsync(employeeViewModel.EmployeeId, ct);
             employeeViewModel.DirectReports = await GetEmployeeDirectReportsAsync(employeeViewModel.EmployeeId, ct);
-            employeeViewModel.Manager = await GetEmployeeReportsToAsync(employeeViewModel.ReportsTo.GetValueOrDefault(), ct);
-            employeeViewModel.ReportsToName = $"{employeeViewModel.Manager.LastName}, {employeeViewModel.Manager.FirstName}";
+            employeeViewModel.Manager = (employeeViewModel.ReportsTo.HasValue) ? await GetEmployeeReportsToAsync(employeeViewModel.ReportsTo.GetValueOrDefault(), ct) : null;
+            employeeViewModel.ReportsToName = (employeeViewModel.ReportsTo.HasValue) ? $"{employeeViewModel.Manager.LastName}, {employeeViewModel.Manager.FirstName}" : String.Empty;
             return employeeViewModel;
         }
 
@@ -374,12 +375,12 @@ namespace Chinook.Domain.Supervisor
         public async Task<List<InvoiceLineViewModel>> GetAllInvoiceLineAsync(CancellationToken ct = default(CancellationToken))
         {
             var invoiceLines = InvoiceLineCoverter.ConvertList(await _invoiceLineRepository.GetAllAsync(ct));
-            foreach (var invoiceLine in invoiceLines)
+            /*foreach (var invoiceLine in invoiceLines)
             {
                 invoiceLine.Track = await GetTrackByIdAsync(invoiceLine.TrackId, ct);
                 invoiceLine.Invoice = await GetInvoiceByIdAsync(invoiceLine.InvoiceId, ct);
                 invoiceLine.TrackName = invoiceLine.Track.Name;
-            }
+            }*/
             return invoiceLines.ToList();
         }
 
@@ -604,7 +605,7 @@ namespace Chinook.Domain.Supervisor
         public async Task<List<TrackViewModel>> GetAllTrackAsync(CancellationToken ct = default(CancellationToken))
         {
             var tracks = TrackCoverter.ConvertList(await _trackRepository.GetAllAsync(ct));
-            foreach (var track in tracks)
+            /*foreach (var track in tracks)
             {
                 track.Genre = await GetGenreByIdAsync(track.GenreId.GetValueOrDefault(), ct);
                 track.Album = await GetAlbumByIdAsync(track.AlbumId, ct);
@@ -612,7 +613,7 @@ namespace Chinook.Domain.Supervisor
                 track.AlbumName = track.Album.Title;
                 track.MediaTypeName = track.MediaType.Name;
                 track.GenreName = track.Genre.Name;
-            }
+            }*/
             return tracks.ToList();
         }
 
