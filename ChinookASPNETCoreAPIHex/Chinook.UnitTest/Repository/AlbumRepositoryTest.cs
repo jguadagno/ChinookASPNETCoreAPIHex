@@ -16,6 +16,9 @@ namespace Chinook.UnitTest.Repository
         [Fact]
         public async Task AlbumGetAllAsync()
         {
+            // Arrange
+            var number = 42;
+            
             // Act
             var albums = await _repo.GetAllAsync();
 
